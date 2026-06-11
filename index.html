@@ -1,0 +1,2715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EveryWatch · Growth Intelligence</title>
+<meta name="description" content="A working document on the systems that built a marketplace. Reference 24/25." />
+<meta property="og:title" content="EveryWatch · Growth Intelligence" />
+<meta property="og:description" content="The systems behind a 20× user growth trajectory. Reference 24/25." />
+<meta name="theme-color" content="#161410" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%23C8A763' stroke-width='1'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23C8A763'/%3E%3C/svg%3E" />
+
+<style>
+/* ============================================================
+   EveryWatch · Growth Intelligence
+   A working document. Materials over decoration.
+   ============================================================ */
+
+:root {
+  /* Page materials */
+  --bg-graphite:  #161410;
+  --bg-plate:     #1C1915;
+  --bg-elev:      #221E18;
+  --bg-deeper:    #110F0C;
+
+  /* Hairlines, engraved */
+  --rule:         #3A332A;
+  --rule-bright:  #5C4F38;
+  --rule-brass:   #6E5A30;
+
+  /* Brass / movement gilding */
+  --brass:        #C8A763;
+  --brass-deep:   #8A6F38;
+  --brass-light:  #DAB97E;
+
+  /* Heat-blued steel */
+  --steel:        #6E8AAC;
+  --steel-deep:   #4D6B8E;
+
+  /* Patina / aged radium */
+  --patina:       #8FA67D;
+  --lume:         #E6D88F;
+
+  /* Inks — warm cream paper */
+  --ink:          #EFE6D1;
+  --ink-soft:     #C8BFA6;
+  --ink-mute:     #A89D85;
+  --ink-low:      #6E6553;
+
+  /* Amber for caution */
+  --amber:        #C97A4C;
+
+  /* Type roles */
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --body:    "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --mono:    "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Rhythm */
+  --pad-x: 64px;
+  --max:   1180px;
+}
+
+/* === Reset / base ============================================ */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-graphite);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1;
+  overflow-x: hidden;
+}
+
+/* Paper grain overlay — barely visible, always present */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3CfeColorMatrix values='0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0 0.39 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.7;
+  mix-blend-mode: overlay;
+}
+
+::selection { background: var(--brass); color: var(--bg-deeper); }
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* === Layout shell ============================================ */
+.shell {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: 100vh;
+}
+
+/* === Sidebar — sticky nav ==================================== */
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--bg-plate) 0%, var(--bg-deeper) 100%);
+  border-right: 1px solid var(--rule);
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.brand-wheel { flex-shrink: 0; }
+
+.brand-mark .name {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1;
+}
+.brand-mark .sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--brass);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 28px;
+  flex-grow: 1;
+}
+.nav-item {
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule);
+  text-align: left;
+  padding: 13px 0;
+  color: var(--ink-mute);
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 6px;
+  align-items: baseline;
+  transition: color 220ms ease;
+}
+.nav-item:last-child { border-bottom: 1px solid var(--rule); }
+.nav-item:hover { color: var(--ink); }
+.nav-item.active { color: var(--ink); }
+.nav-item.active .nav-num { color: var(--brass); }
+.nav-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-low);
+}
+.nav-label {
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: -0.005em;
+}
+
+.sidebar-foot {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.sidebar-foot .eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.sidebar-foot .note {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-low);
+  max-width: 28ch;
+}
+.sidebar-foot .author {
+  margin-top: 18px;
+  font-family: var(--display);
+  font-size: 15px;
+  color: var(--ink);
+  font-style: italic;
+}
+.sidebar-foot .author small {
+  display: block;
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* === Main canvas ============================================= */
+.canvas {
+  min-width: 0;
+}
+
+/* Top bar with reference number and live seconds */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px var(--pad-x);
+  background: rgba(22, 20, 16, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-low);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.topbar-left .ref {
+  color: var(--brass);
+}
+.topbar-right {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-low);
+  letter-spacing: 0.06em;
+}
+.topbar-right .label { color: var(--ink-mute); }
+.topbar-right .clock { color: var(--ink); }
+.topbar-right .secs {
+  color: var(--brass);
+  display: inline-block;
+  min-width: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* === Typography roles ======================================== */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brass);
+  font-weight: 400;
+}
+.eyebrow--steel { color: var(--steel); }
+.eyebrow--ink   { color: var(--ink-mute); }
+.eyebrow--amber { color: var(--amber); }
+
+.h1 {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: clamp(48px, 6.4vw, 84px);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0;
+}
+.h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  margin: 0;
+}
+.h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0;
+}
+
+.lead {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin: 0;
+}
+
+.p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-mute);
+  margin: 0;
+  max-width: 62ch;
+}
+.p--ink { color: var(--ink); }
+.p--small { font-size: 13.5px; }
+
+.section {
+  padding: 96px var(--pad-x);
+  max-width: var(--max);
+  position: relative;
+}
+.section--narrow { padding: 64px var(--pad-x); }
+.divider {
+  height: 1px;
+  background: var(--rule);
+  margin: 0 var(--pad-x);
+}
+
+/* Certification card stat block */
+.cert {
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+}
+.cert .v {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 16px;
+}
+.cert .num {
+  font-family: var(--mono);
+  font-weight: 300;
+  font-size: 46px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cert .unit {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--ink-mute);
+}
+.cert .label {
+  font-family: var(--body);
+  font-size: 11px;
+  color: var(--ink-low);
+  margin-top: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cert .hint {
+  font-size: 12px;
+  color: var(--ink-mute);
+  margin-top: 6px;
+  font-style: italic;
+  font-family: var(--display);
+}
+.cert--steel { border-top-color: var(--steel-deep); }
+.cert--patina { border-top-color: var(--patina); }
+.cert--amber { border-top-color: var(--amber); }
+
+/* Grids */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr;        gap: 48px; }
+
+/* === HERO ==================================================== */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px var(--pad-x) 48px;
+  overflow: hidden;
+}
+
+/* Engraved grid background — barely visible */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(200, 167, 99, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(200, 167, 99, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 75%);
+}
+
+.hero-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+.hero-head .ref-stamp {
+  border: 1px solid var(--rule-brass);
+  padding: 10px 16px 11px;
+  background: rgba(28, 25, 21, 0.5);
+}
+.hero-head .ref-stamp .ref-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.hero-head .ref-stamp .ref-no {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  margin-top: 5px;
+  letter-spacing: 0.1em;
+}
+
+.hero-center {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex-grow: 1;
+  padding: 30px 0;
+}
+
+.hero-text .opening {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--brass);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.hero-text .title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(56px, 8vw, 110px);
+  line-height: 0.95;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  margin: 0;
+}
+.hero-text .title .ampersand {
+  color: var(--brass);
+  font-weight: 400;
+  font-style: italic;
+}
+.hero-text .sub {
+  margin-top: 36px;
+  font-family: var(--display);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  max-width: 38ch;
+}
+.hero-text .scroll-cue {
+  margin-top: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+}
+.hero-text .scroll-cue .line {
+  width: 60px;
+  height: 1px;
+  background: var(--rule-bright);
+}
+
+/* The movement SVG */
+.hero-movement {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  max-width: 480px;
+  margin-left: auto;
+}
+.hero-movement svg { width: 100%; height: 100%; }
+
+/* The balance wheel oscillates — the only ambient motion */
+@keyframes oscillate {
+  0%,100% { transform: rotate(-22deg); }
+  50%     { transform: rotate(22deg); }
+}
+.bal-wheel {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: oscillate 5.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.hero-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 2;
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+}
+.hero-foot .credit {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+}
+.hero-foot .credit .v {
+  color: var(--ink);
+  margin-left: 6px;
+}
+.hero-foot-stats {
+  display: flex;
+  gap: 48px;
+}
+.hero-foot-stat .k {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+}
+.hero-foot-stat .v {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--ink);
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.hero-foot-stat .v em {
+  font-style: normal;
+  color: var(--brass);
+  margin-left: 3px;
+}
+
+/* === Section openers ========================================= */
+.opener {
+  padding: 100px var(--pad-x) 60px;
+  position: relative;
+}
+.opener::before {
+  content: "";
+  position: absolute;
+  left: var(--pad-x);
+  top: 60px;
+  width: 56px;
+  height: 1px;
+  background: var(--brass);
+}
+.opener .crumb {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.opener .crumb .roman {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--brass);
+}
+.opener .crumb .sep { color: var(--ink-low); }
+.opener .crumb .subtitle {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+
+/* === Pillars ================================================= */
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.pillar { border-top: 1px solid var(--rule); padding-top: 22px; }
+.pillar-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.pillar h3 { margin-top: 18px; }
+.pillar .body { margin-top: 14px; }
+.pillar .metric {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--brass);
+  letter-spacing: 0.05em;
+}
+
+/* === Movement Explorer (gears) =============================== */
+.complications {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.tabs {
+  display: flex;
+  gap: 32px;
+  padding: 28px var(--pad-x) 0;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.tab {
+  background: none; border: none;
+  padding: 12px 0 18px;
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--ink-mute);
+  border-bottom: 1px solid transparent;
+  transition: color 200ms, border-color 200ms;
+}
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); border-bottom-color: var(--brass); }
+
+.tab-content { display: none; padding: 56px var(--pad-x) 64px; max-width: var(--max); }
+.tab-content.active { display: block; }
+
+/* === Chart canvas ============================================ */
+.chart {
+  width: 100%;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 0 6px;
+  margin-top: 24px;
+}
+.chart svg { display: block; width: 100%; height: auto; }
+.chart-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 8px;
+}
+.chart-head .ref-no {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-low);
+  letter-spacing: 0.18em;
+}
+
+/* === Lot / Auction catalogue style (Section IV) ============== */
+.lot {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  padding: 40px 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.lot:last-of-type { border-bottom: 1px solid var(--rule); }
+.lot-side {
+  position: sticky;
+  top: 90px;
+}
+.lot-no {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.lot-id {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--ink);
+  margin-top: 6px;
+  font-style: italic;
+}
+.lot-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--ink-mute);
+  margin-top: 16px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule-bright);
+  display: inline-block;
+  text-transform: uppercase;
+}
+.lot-icon {
+  margin-top: 28px;
+  width: 80px;
+  height: 80px;
+  opacity: 0.5;
+}
+.lot-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.18;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  max-width: 28ch;
+}
+.lot-summary {
+  margin-top: 18px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+}
+.lot-toggle {
+  margin-top: 28px;
+  background: none;
+  border: none;
+  color: var(--brass);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule-brass);
+  transition: color 200ms, border-color 200ms;
+}
+.lot-toggle:hover { color: var(--brass-light); border-bottom-color: var(--brass); }
+.lot-toggle .plus {
+  display: inline-block;
+  transition: transform 250ms ease;
+}
+.lot.open .lot-toggle .plus { transform: rotate(45deg); }
+.lot-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 500ms cubic-bezier(0.6, 0.05, 0.4, 1);
+  margin-top: 0;
+}
+.lot.open .lot-detail {
+  max-height: 3000px;
+  margin-top: 28px;
+}
+
+/* Process rows inside lot detail */
+.process-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 28px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+}
+.process-row .marker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.process-row .marker--steel { color: var(--steel); }
+.process-row .marker--patina { color: var(--patina); }
+.process-row .marker--amber { color: var(--amber); }
+.process-row .label-d {
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.process-row .body {
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ink-mute);
+  max-width: 62ch;
+}
+
+/* === The Craft (trade-offs) ================================== */
+.trade {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  padding: 40px 0;
+  border-top: 1px solid var(--rule);
+}
+.trade:last-child { border-bottom: 1px solid var(--rule); }
+.trade-side .chosen {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.trade-side .chosen-v {
+  display: block;
+  font-family: var(--display);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  margin-top: 4px;
+}
+.trade-cells { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; }
+.trade-cell .cell-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-top: 1px solid currentColor;
+  padding-top: 12px;
+}
+.trade-cell--cost   .cell-label { color: var(--amber); }
+.trade-cell--payoff .cell-label { color: var(--patina); }
+.trade-cell--lesson .cell-label { color: var(--brass); }
+.trade-cell .cell-body {
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+}
+
+/* === Metric blocks (Intelligence) ============================ */
+.metric-block { border-top: 1px solid var(--rule); padding: 32px 0; }
+.metric-block:last-of-type { border-bottom: 1px solid var(--rule); }
+.metric-headline {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 14px;
+  max-width: 32ch;
+}
+.metric-cells {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  margin-top: 22px;
+}
+.metric-cell .ml {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.metric-cell--obs  .ml { color: var(--ink-low); }
+.metric-cell--cause .ml { color: var(--steel); }
+.metric-cell--next .ml { color: var(--brass); }
+.metric-cell .mb {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+}
+.metric-cell--next .mb { color: var(--ink); }
+
+/* === Observatory (90-day plan) =============================== */
+.principle {
+  border-top: 1px solid var(--rule);
+  padding-top: 22px;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+}
+.principle .roman {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--brass);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.day-block {
+  border-top: 1px solid var(--rule);
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+}
+.day-block:last-of-type { border-bottom: 1px solid var(--rule); }
+.day-block .day-window {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--brass);
+  text-transform: uppercase;
+}
+.day-block .day-label {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 30px;
+  color: var(--ink);
+  margin-top: 12px;
+  font-style: italic;
+}
+.day-items { display: flex; flex-direction: column; gap: 14px; }
+.day-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 16px;
+}
+.day-item .ix {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--brass);
+  padding-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.day-item .txt {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* === Constellation (dealer map) ============================== */
+.constellation {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 28px 0;
+  position: relative;
+}
+.constellation svg { width: 100%; height: 100%; }
+@keyframes glow {
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.dealer-dot { animation: glow 4s ease-in-out infinite; }
+.dealer-dot.d2 { animation-delay: 0.7s; }
+.dealer-dot.d3 { animation-delay: 1.4s; }
+.dealer-dot.d4 { animation-delay: 2.1s; }
+.dealer-dot.d5 { animation-delay: 2.8s; }
+.dealer-dot.d6 { animation-delay: 3.5s; }
+
+/* === Footer ================================================== */
+.footer {
+  padding: 56px var(--pad-x);
+  border-top: 1px solid var(--rule);
+  background: var(--bg-deeper);
+}
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.footer-left .name {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.footer-left .role {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--brass);
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+.footer-right {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+.colophon {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-low);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+/* === Responsive ============================================== */
+@media (max-width: 1080px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; flex-direction: row; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 24px var(--pad-x); }
+  .nav { flex-direction: row; flex-wrap: wrap; gap: 16px; margin-top: 0; }
+  .nav-item { border-top: none; padding: 6px 12px; border: 1px solid var(--rule); border-radius: 0; }
+  .nav-item:last-child { border-bottom: 1px solid var(--rule); }
+  .sidebar-foot { border-top: none; margin-top: 0; padding-top: 0; }
+  .hero-center { grid-template-columns: 1fr; gap: 40px; }
+  .hero-movement { max-width: 360px; margin: 0 auto; }
+  .grid-4 { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .grid-3 { grid-template-columns: 1fr; gap: 28px; }
+  .grid-2 { grid-template-columns: 1fr; gap: 32px; }
+  .complications { grid-template-columns: 1fr; }
+  .metric-cells { grid-template-columns: 1fr; }
+  .trade { grid-template-columns: 1fr; }
+  .trade-cells { grid-template-columns: 1fr; }
+  .lot { grid-template-columns: 1fr; }
+  .lot-side { position: static; }
+  .process-row { grid-template-columns: 1fr; gap: 8px; }
+  .day-block { grid-template-columns: 1fr; }
+  .principle { grid-template-columns: 1fr; }
+  :root { --pad-x: 28px; }
+}
+
+@media (max-width: 640px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+  .hero-foot { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .hero-foot-stats { flex-wrap: wrap; gap: 24px; }
+}
+
+/* Print discipline */
+@media print {
+  .sidebar, .topbar { display: none; }
+  .shell { grid-template-columns: 1fr; }
+  body { background: white; color: black; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bal-wheel { animation: none; }
+  .dealer-dot { animation: none; opacity: 0.7; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-wheel" width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <circle cx="18" cy="18" r="16" stroke="#C8A763" stroke-width="0.8" />
+        <circle cx="18" cy="18" r="10" stroke="#C8A763" stroke-width="0.6" opacity="0.55" />
+        <circle cx="18" cy="18" r="1.6" fill="#C8A763" />
+        <line x1="18" y1="1" x2="18" y2="6" stroke="#C8A763" stroke-width="0.8" />
+        <line x1="18" y1="30" x2="18" y2="35" stroke="#C8A763" stroke-width="0.8" />
+        <line x1="1" y1="18" x2="6" y2="18" stroke="#C8A763" stroke-width="0.8" />
+        <line x1="30" y1="18" x2="35" y2="18" stroke="#C8A763" stroke-width="0.8" />
+      </svg>
+      <div class="brand-mark">
+        <div class="name">EveryWatch</div>
+        <div class="sub">Growth Intelligence</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <button class="nav-item" data-target="collection"><span class="nav-num">I</span><span class="nav-label">The Collection</span></button>
+      <button class="nav-item" data-target="market"><span class="nav-num">II</span><span class="nav-label">The Market</span></button>
+      <button class="nav-item" data-target="movement"><span class="nav-num">III</span><span class="nav-label">The Movement</span></button>
+      <button class="nav-item" data-target="loupe"><span class="nav-num">IV</span><span class="nav-label">The Loupe</span></button>
+      <button class="nav-item" data-target="craft"><span class="nav-num">V</span><span class="nav-label">The Craft</span></button>
+      <button class="nav-item" data-target="intelligence"><span class="nav-num">VI</span><span class="nav-label">The Intelligence</span></button>
+      <button class="nav-item" data-target="observatory"><span class="nav-num">VII</span><span class="nav-label">The Observatory</span></button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="eyebrow">Prepared by</div>
+      <div class="author">
+        Daniel Deepak
+        <small>Growth · Bangalore</small>
+      </div>
+      <div class="note">A working document on the EveryWatch growth function. What was built, what was learned, what comes next.</div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="canvas">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="ref">Reference 24/25</span>
+        <span>·</span>
+        <span>Seventeen months observed</span>
+      </div>
+      <div class="topbar-right">
+        <span class="label">Session</span>
+        <span class="clock" id="clock">—</span>
+        <span class="secs" id="secs">—</span>
+      </div>
+    </div>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero-head">
+        <div class="ref-stamp">
+          <div class="ref-eyebrow">EveryWatch · Maison Atelier</div>
+          <div class="ref-no">REF. EW-GI-2425 / 17M</div>
+        </div>
+        <div class="ref-stamp" style="text-align:right">
+          <div class="ref-eyebrow">Edition</div>
+          <div class="ref-no">No. 01 / Working Document</div>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <div class="hero-text">
+          <div class="opening">An Opening</div>
+          <h1 class="title">Growth, <br/><span class="ampersand">&amp;</span> the systems<br/>that produced it.</h1>
+          <p class="sub">A working document on the EveryWatch growth function — seventeen months, two clear inflections, and the architecture beneath both. Read it as you would a movement: every part present for a reason.</p>
+          <div class="scroll-cue">
+            <span class="line"></span>
+            <span>Open the case-back</span>
+          </div>
+        </div>
+
+        <div class="hero-movement" aria-hidden="true">
+          <svg viewBox="0 0 480 480" fill="none">
+            <!-- Outer case ring -->
+            <circle cx="240" cy="240" r="232" stroke="#3A332A" stroke-width="1" />
+            <circle cx="240" cy="240" r="222" stroke="#5C4F38" stroke-width="0.5" opacity="0.6" />
+            <circle cx="240" cy="240" r="212" stroke="#3A332A" stroke-width="0.5" opacity="0.7" />
+
+            <!-- Indices around the rim -->
+            <g stroke="#8A6F38" stroke-width="0.7">
+              <line x1="240" y1="10"  x2="240" y2="22" />
+              <line x1="240" y1="458" x2="240" y2="470" />
+              <line x1="10"  y1="240" x2="22"  y2="240" />
+              <line x1="458" y1="240" x2="470" y2="240" />
+              <!-- 1, 2, 4, 5 positions -->
+              <line x1="350" y1="50"  x2="343" y2="62"  opacity="0.7"/>
+              <line x1="430" y1="130" x2="418" y2="137" opacity="0.7"/>
+              <line x1="430" y1="350" x2="418" y2="343" opacity="0.7"/>
+              <line x1="350" y1="430" x2="343" y2="418" opacity="0.7"/>
+              <line x1="130" y1="430" x2="137" y2="418" opacity="0.7"/>
+              <line x1="50"  y1="350" x2="62"  y2="343" opacity="0.7"/>
+              <line x1="50"  y1="130" x2="62"  y2="137" opacity="0.7"/>
+              <line x1="130" y1="50"  x2="137" y2="62"  opacity="0.7"/>
+            </g>
+
+            <!-- Mainplate -->
+            <circle cx="240" cy="240" r="195" stroke="#3A332A" stroke-width="0.5" fill="#1A1813" />
+
+            <!-- Guilloché radiating lines -->
+            <g stroke="#C8A763" stroke-width="0.3" opacity="0.18">
+              <line x1="240" y1="60"  x2="240" y2="420" />
+              <line x1="60"  y1="240" x2="420" y2="240" />
+              <line x1="113" y1="113" x2="367" y2="367" />
+              <line x1="367" y1="113" x2="113" y2="367" />
+              <line x1="170" y1="65"  x2="310" y2="415" />
+              <line x1="310" y1="65"  x2="170" y2="415" />
+              <line x1="65"  y1="170" x2="415" y2="310" />
+              <line x1="65"  y1="310" x2="415" y2="170" />
+            </g>
+
+            <!-- Bridge: curved arc top-left -->
+            <path d="M 120 140 Q 200 90 280 130 Q 310 165 290 220 Q 230 250 150 220 Q 100 190 120 140 Z"
+                  fill="#221E18" stroke="#8A6F38" stroke-width="0.6" />
+            <path d="M 130 150 Q 200 105 270 140 Q 295 170 280 210 Q 225 235 155 210 Q 115 185 130 150 Z"
+                  fill="none" stroke="#5C4F38" stroke-width="0.3" />
+
+            <!-- Mainspring barrel — left -->
+            <circle cx="150" cy="280" r="40" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.6" />
+            <g stroke="#8A6F38" stroke-width="0.4" opacity="0.7" fill="none">
+              <circle cx="150" cy="280" r="34" />
+              <circle cx="150" cy="280" r="28" />
+              <circle cx="150" cy="280" r="22" />
+              <circle cx="150" cy="280" r="16" />
+              <circle cx="150" cy="280" r="10" />
+            </g>
+            <circle cx="150" cy="280" r="3" fill="#C8A763" />
+
+            <!-- Center wheel -->
+            <circle cx="240" cy="260" r="22" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.6" />
+            <g stroke="#8A6F38" stroke-width="0.5">
+              <line x1="240" y1="240" x2="240" y2="280" />
+              <line x1="220" y1="260" x2="260" y2="260" />
+              <line x1="225" y1="245" x2="255" y2="275" />
+              <line x1="255" y1="245" x2="225" y2="275" />
+            </g>
+            <circle cx="240" cy="260" r="2.5" fill="#C8A763" />
+
+            <!-- Third wheel -->
+            <circle cx="305" cy="305" r="18" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.6" />
+            <g stroke="#8A6F38" stroke-width="0.4">
+              <line x1="305" y1="287" x2="305" y2="323" />
+              <line x1="287" y1="305" x2="323" y2="305" />
+              <line x1="291" y1="291" x2="319" y2="319" />
+              <line x1="319" y1="291" x2="291" y2="319" />
+            </g>
+            <circle cx="305" cy="305" r="2" fill="#C8A763" />
+
+            <!-- Escape wheel -->
+            <circle cx="340" cy="250" r="14" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.5" />
+            <g stroke="#8A6F38" stroke-width="0.4">
+              <circle cx="340" cy="250" r="10" fill="none" />
+              <line x1="340" y1="236" x2="340" y2="264" />
+              <line x1="326" y1="250" x2="354" y2="250" />
+              <line x1="330" y1="240" x2="350" y2="260" />
+              <line x1="350" y1="240" x2="330" y2="260" />
+            </g>
+
+            <!-- Pallet fork (between escape and balance) -->
+            <path d="M 350 195 L 355 185 L 363 190 L 365 198 L 360 205 L 352 202 Z"
+                  fill="#221E18" stroke="#8A6F38" stroke-width="0.5" />
+
+            <!-- Balance wheel — the heart, gently oscillating -->
+            <g class="bal-wheel">
+              <circle cx="345" cy="155" r="48" fill="none" stroke="#8A6F38" stroke-width="0.7" />
+              <circle cx="345" cy="155" r="42" fill="none" stroke="#5C4F38" stroke-width="0.4" />
+              <!-- spokes -->
+              <g stroke="#8A6F38" stroke-width="0.5">
+                <line x1="345" y1="107" x2="345" y2="203" />
+                <line x1="297" y1="155" x2="393" y2="155" />
+                <line x1="311" y1="121" x2="379" y2="189" />
+                <line x1="379" y1="121" x2="311" y2="189" />
+              </g>
+              <!-- hairspring (concentric coils) -->
+              <g stroke="#C8A763" stroke-width="0.4" fill="none" opacity="0.9">
+                <circle cx="345" cy="155" r="6" />
+                <circle cx="345" cy="155" r="10" />
+                <circle cx="345" cy="155" r="14" />
+                <circle cx="345" cy="155" r="18" />
+              </g>
+              <!-- mass weights at rim -->
+              <circle cx="345" cy="107" r="3" fill="#8A6F38" />
+              <circle cx="345" cy="203" r="3" fill="#8A6F38" />
+              <circle cx="297" cy="155" r="3" fill="#8A6F38" />
+              <circle cx="393" cy="155" r="3" fill="#8A6F38" />
+              <!-- center jewel -->
+              <circle cx="345" cy="155" r="2.5" fill="#C8A763" />
+            </g>
+
+            <!-- Jewels (synthetic rubies) at bearing points -->
+            <circle cx="150" cy="280" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+            <circle cx="240" cy="260" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+            <circle cx="305" cy="305" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+            <circle cx="340" cy="250" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+            <circle cx="195" cy="180" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+            <circle cx="380" cy="320" r="3" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4" />
+
+            <!-- Engraved signature -->
+            <text x="240" y="395" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-size="11" fill="#8A6F38" letter-spacing="2">
+              Calibre EW · Seventeen Months · Adjusted Six Positions
+            </text>
+            <text x="240" y="412" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#6E6553" letter-spacing="3">
+              EW—GI—2425
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="hero-foot">
+        <div class="credit">
+          Atelier · Bangalore <span class="v">— Anno 2026</span>
+        </div>
+        <div class="hero-foot-stats">
+          <div class="hero-foot-stat">
+            <div class="k">Period</div>
+            <div class="v">Jan 24 — May 25</div>
+          </div>
+          <div class="hero-foot-stat">
+            <div class="k">Growth multiple</div>
+            <div class="v">20<em>×</em></div>
+          </div>
+          <div class="hero-foot-stat">
+            <div class="k">Lifetime ROAS</div>
+            <div class="v">34<em>×</em></div>
+          </div>
+          <div class="hero-foot-stat">
+            <div class="k">Peak month</div>
+            <div class="v">105<em>×</em></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ I. THE COLLECTION ============ -->
+    <section id="collection">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">I.</span><span class="sep">·</span>
+          <span class="subtitle">The Collection · A trajectory observed</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">From a quiet baseline, to a marketplace of two hundred thousand monthly users.</h1>
+        <p class="lead" style="margin-top:36px">
+          This is not a campaign retrospective. It is a record of systems — what they were, what they did, and what they refused to do. Read it as a watchmaker would read a movement diagram: every part present for a reason.
+        </p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="eyebrow">The seventeen-month arc</div>
+        <div class="grid-4" style="margin-top: 28px">
+          <div class="cert">
+            <div class="eyebrow">Growth multiple</div>
+            <div class="v"><span class="num">20</span><span class="unit">×</span></div>
+            <div class="label">Monthly new users · Jan '24 → May '25</div>
+            <div class="hint">From 9,113 to 182,782</div>
+          </div>
+          <div class="cert">
+            <div class="eyebrow">Cumulative new users</div>
+            <div class="v"><span class="num">1.33</span><span class="unit">M</span></div>
+            <div class="label">Acquired across seventeen months</div>
+            <div class="hint">Plus 215,636 returning</div>
+          </div>
+          <div class="cert cert--steel">
+            <div class="eyebrow eyebrow--steel">Paid efficiency</div>
+            <div class="v"><span class="num">34</span><span class="unit">×</span></div>
+            <div class="label">Lifetime ROAS on Google Ads</div>
+            <div class="hint">$23.2K spend · $787.9K attributed</div>
+          </div>
+          <div class="cert cert--patina">
+            <div class="eyebrow eyebrow--ink" style="color:#8FA67D">Best operating month</div>
+            <div class="v"><span class="num">105</span><span class="unit">×</span></div>
+            <div class="label">ROAS · May 2025</div>
+            <div class="hint">$0.10 CPL · 214.9% CVR</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Headline chart -->
+      <div class="section">
+        <div class="chart-head">
+          <div>
+            <div class="eyebrow">Figure 01</div>
+            <h2 class="h2" style="margin-top:10px; max-width: 28ch">The shape of the curve is the thesis.</h2>
+          </div>
+          <div class="ref-no">n = 17 months · source: GA4</div>
+        </div>
+        <div class="chart" id="chart-users"></div>
+        <div class="grid-2" style="margin-top:36px">
+          <p class="p">
+            Two inflections matter. <span style="color:var(--brass)">June 2024</span> — the curve breaks from a flat four-to-nine-thousand baseline into a content-driven trajectory. <span style="color:var(--brass)">January 2025</span> — the trajectory shifts again as compounding organic meets a tightened paid engine. Nothing in between is an accident; it is the output of a system that, by then, had finally been worth building.
+          </p>
+          <p class="p">
+            The plateau from January 2025 onward is not stagnation. It is the point at which the engine stopped being labor-intensive — the same machinery delivering 150–180K new users a month without proportional spend. The honest read: the next inflection is a different problem. Not acquisition. Retention.
+          </p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Three pillars -->
+      <div class="section">
+        <div class="eyebrow">The growth function, in three lines</div>
+        <div class="pillars" style="margin-top:32px">
+          <div class="pillar">
+            <div class="pillar-head">
+              <span class="eyebrow">01</span>
+              <span class="eyebrow eyebrow--ink">Pillar</span>
+            </div>
+            <h3 class="h3">Organic at scale.</h3>
+            <p class="p body" style="margin-top:14px">From 100K weekly impressions to 1.6M. CTR held above 1.7% through five compounding quarters. Organic did not arrive — it was assembled.</p>
+            <div class="metric">41.3M impressions · 1.06M clicks</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-head">
+              <span class="eyebrow">02</span>
+              <span class="eyebrow eyebrow--ink">Pillar</span>
+            </div>
+            <h3 class="h3">Paid as a scalpel.</h3>
+            <p class="p body" style="margin-top:14px">Spend deliberately small — $23K across 13 months — because the channel earns its place at sub-$1 CPL. The point was never to chase reach. The point was to keep the economics on the right side of the ledger.</p>
+            <div class="metric">$23,210 → $787,874</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-head">
+              <span class="eyebrow">03</span>
+              <span class="eyebrow eyebrow--ink">Pillar</span>
+            </div>
+            <h3 class="h3">The unbuilt third leg.</h3>
+            <p class="p body" style="margin-top:14px">Returning users at 14% of total. That is not a failure — it is the named, prioritized opportunity for the next twelve months, and the centerpiece of the lifecycle work that comes next.</p>
+            <div class="metric">215,636 returning · 14% of total</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ II. THE MARKET ============ -->
+    <section id="market">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">II.</span><span class="sep">·</span>
+          <span class="subtitle">The Market · Where EveryWatch sits</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">A marketplace, not a website.</h1>
+        <p class="lead" style="margin-top:36px">
+          EveryWatch sits at the intersection of collectors, dealers, and the slow-moving inventory of the world&rsquo;s most opaque luxury category. The growth question was never &ldquo;how much traffic.&rdquo; It was which traffic, on which side, with what intent.
+        </p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="grid-2">
+          <div>
+            <div class="eyebrow">The category</div>
+            <h3 class="h3" style="margin-top:16px">Luxury watches as a discovery problem.</h3>
+            <p class="p" style="margin-top:18px">The secondary watch market is fragmented across auction houses, specialty dealers, forums, and a long tail of private sellers. Pricing is opaque. Provenance is opaque. Availability moves faster than search engines index it.</p>
+            <p class="p" style="margin-top:14px">The buyer&rsquo;s real question is rarely &ldquo;where can I buy&rdquo; — it is &ldquo;is this fair, is this real, is there a better one out there.&rdquo; EveryWatch is built for that question. The growth strategy follows from it: every system here exists to compress the time between a collector&rsquo;s interest and a collector&rsquo;s confidence.</p>
+          </div>
+          <div>
+            <div class="eyebrow">Two-sided dynamics</div>
+            <h3 class="h3" style="margin-top:16px">Demand is loud. Supply is slow.</h3>
+            <p class="p" style="margin-top:18px">The collector side scales with content, paid acquisition, and brand. The dealer side scales through relationships, tooling, and economic asymmetry — they list because EveryWatch moves their inventory faster than alternatives.</p>
+            <p class="p" style="margin-top:14px">These are different growth functions, run on different clocks. The numbers in this report measure the collector side. The dealer side is its own movement, with its own metrics, and is the next chapter to instrument.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Demand-side chart -->
+      <div class="section">
+        <div class="chart-head">
+          <div>
+            <div class="eyebrow">Figure 02</div>
+            <h2 class="h2" style="margin-top:10px; max-width: 30ch">Total monthly users, against returning.</h2>
+          </div>
+          <div class="ref-no">The gap is the strategy</div>
+        </div>
+        <p class="p" style="margin-top:14px">The space between the two curves is the most strategically interesting part of this report.</p>
+        <div class="chart" id="chart-returning"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Marketplace inventory -->
+      <div class="section">
+        <div class="eyebrow">Marketplace inventory · collector side</div>
+        <div class="grid-4" style="margin-top:24px">
+          <div class="cert">
+            <div class="eyebrow">Cumulative total</div>
+            <div class="v"><span class="num">1.54</span><span class="unit">M</span></div>
+            <div class="label">Jan '24 — May '25</div>
+          </div>
+          <div class="cert cert--steel">
+            <div class="eyebrow eyebrow--steel">New collectors</div>
+            <div class="v"><span class="num">1.33</span><span class="unit">M</span></div>
+            <div class="label">86% of total</div>
+          </div>
+          <div class="cert cert--patina">
+            <div class="eyebrow" style="color:#8FA67D">Returning</div>
+            <div class="v"><span class="num">215.6</span><span class="unit">K</span></div>
+            <div class="label">14% of total</div>
+            <div class="hint">The next chapter</div>
+          </div>
+          <div class="cert cert--amber">
+            <div class="eyebrow eyebrow--amber">Peak monthly</div>
+            <div class="v"><span class="num">203.6</span><span class="unit">K</span></div>
+            <div class="label">May 2025</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Dealer Constellation -->
+      <div class="section">
+        <div class="eyebrow">The dealer constellation</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 32ch">A network plotted, not yet measured.</h2>
+        <p class="p" style="margin-top:14px; max-width: 60ch">The dealer side is the slow side of the marketplace. Below: a representation of the regions where dealer density compounds — and where the next twelve months of supply-side investment will concentrate.</p>
+
+        <div class="constellation">
+          <svg viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+            <!-- Faint world plate -->
+            <rect width="1000" height="500" fill="none" />
+
+            <!-- Engraved meridians (longitude) -->
+            <g stroke="#3A332A" stroke-width="0.5" opacity="0.5">
+              <path d="M 200 0 L 200 500" />
+              <path d="M 300 0 L 300 500" />
+              <path d="M 400 0 L 400 500" />
+              <path d="M 500 0 L 500 500" />
+              <path d="M 600 0 L 600 500" />
+              <path d="M 700 0 L 700 500" />
+              <path d="M 800 0 L 800 500" />
+            </g>
+            <!-- Parallels (latitude) — curved subtle -->
+            <g stroke="#3A332A" stroke-width="0.5" opacity="0.5" fill="none">
+              <path d="M 0 150 Q 500 130 1000 150" />
+              <path d="M 0 250 Q 500 230 1000 250" />
+              <path d="M 0 350 Q 500 330 1000 350" />
+            </g>
+
+            <!-- Continent silhouettes — abstracted geometric -->
+            <g fill="#221E18" stroke="#5C4F38" stroke-width="0.6">
+              <!-- North America -->
+              <path d="M 80 110 Q 130 90 200 110 L 240 140 L 250 200 L 230 250 L 180 270 L 140 250 L 110 220 L 90 180 Z" />
+              <!-- South America -->
+              <path d="M 220 290 L 260 290 L 280 330 L 270 380 L 240 420 L 220 400 L 215 350 Z" />
+              <!-- Europe -->
+              <path d="M 430 110 L 510 100 L 530 130 L 520 170 L 480 190 L 440 175 L 425 145 Z" />
+              <!-- Africa -->
+              <path d="M 470 200 L 540 200 L 560 260 L 540 320 L 510 360 L 480 340 L 460 290 L 450 240 Z" />
+              <!-- Middle East -->
+              <path d="M 555 175 L 600 175 L 620 210 L 605 235 L 575 230 L 555 200 Z" />
+              <!-- Asia -->
+              <path d="M 620 100 L 800 90 L 850 130 L 870 200 L 830 240 L 770 250 L 700 220 L 650 200 L 620 160 Z" />
+              <!-- SE Asia / Indonesia -->
+              <path d="M 770 260 L 840 270 L 820 295 L 790 290 Z" />
+              <!-- Australia -->
+              <path d="M 800 320 L 880 320 L 900 360 L 870 390 L 820 380 L 800 350 Z" />
+            </g>
+
+            <!-- Dealer dots — major luxury watch markets -->
+            <g>
+              <!-- Geneva — the spiritual capital -->
+              <circle cx="475" cy="155" r="5" fill="#C8A763" class="dealer-dot" />
+              <circle cx="475" cy="155" r="12" fill="none" stroke="#C8A763" stroke-width="0.5" opacity="0.4" />
+              <text x="490" y="158" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">GENEVA</text>
+
+              <!-- London -->
+              <circle cx="450" cy="140" r="4" fill="#C8A763" class="dealer-dot d2" />
+              <text x="437" y="132" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">LONDON</text>
+
+              <!-- New York -->
+              <circle cx="200" cy="175" r="4" fill="#C8A763" class="dealer-dot d3" />
+              <text x="155" y="172" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">NEW YORK</text>
+
+              <!-- Tokyo -->
+              <circle cx="830" cy="165" r="4" fill="#C8A763" class="dealer-dot d4" />
+              <text x="843" y="168" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">TOKYO</text>
+
+              <!-- Hong Kong -->
+              <circle cx="795" cy="205" r="4" fill="#C8A763" class="dealer-dot d5" />
+              <text x="808" y="208" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">HONG KONG</text>
+
+              <!-- Dubai -->
+              <circle cx="600" cy="210" r="4" fill="#C8A763" class="dealer-dot d6" />
+              <text x="613" y="213" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="2">DUBAI</text>
+
+              <!-- Singapore -->
+              <circle cx="785" cy="270" r="3.5" fill="#C8A763" class="dealer-dot d2" />
+              <text x="765" y="285" font-family="JetBrains Mono" font-size="8" fill="#6E6553" letter-spacing="1.5">SINGAPORE</text>
+
+              <!-- Milan -->
+              <circle cx="490" cy="160" r="3" fill="#C8A763" class="dealer-dot d3" opacity="0.7" />
+
+              <!-- Paris -->
+              <circle cx="465" cy="145" r="3" fill="#C8A763" class="dealer-dot d4" opacity="0.7" />
+
+              <!-- Munich -->
+              <circle cx="495" cy="140" r="3" fill="#C8A763" class="dealer-dot d5" opacity="0.7" />
+
+              <!-- Los Angeles -->
+              <circle cx="135" cy="195" r="3.5" fill="#C8A763" class="dealer-dot d2" />
+
+              <!-- Miami -->
+              <circle cx="215" cy="220" r="3" fill="#C8A763" class="dealer-dot d4" opacity="0.7" />
+
+              <!-- Mumbai -->
+              <circle cx="680" cy="220" r="3" fill="#C8A763" class="dealer-dot d6" opacity="0.8" />
+
+              <!-- Beijing -->
+              <circle cx="790" cy="150" r="3" fill="#C8A763" class="dealer-dot d3" opacity="0.7" />
+
+              <!-- Sydney -->
+              <circle cx="855" cy="365" r="3" fill="#C8A763" class="dealer-dot d5" opacity="0.7" />
+            </g>
+
+            <!-- Connecting filaments -->
+            <g stroke="#8A6F38" stroke-width="0.4" opacity="0.35" fill="none">
+              <path d="M 200 175 Q 350 100 475 155" />
+              <path d="M 475 155 Q 620 130 830 165" />
+              <path d="M 475 155 Q 540 180 600 210" />
+              <path d="M 600 210 Q 700 240 795 205" />
+              <path d="M 450 140 Q 460 148 475 155" />
+              <path d="M 475 155 Q 480 158 490 160" />
+            </g>
+
+            <!-- Caption -->
+            <text x="500" y="475" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-size="13" fill="#A89D85" letter-spacing="2">
+              The dealer constellation — illustrative density of luxury watch markets.
+            </text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ III. THE MOVEMENT ============ -->
+    <section id="movement">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">III.</span><span class="sep">·</span>
+          <span class="subtitle">The Movement · Five complications, one calibre</span>
+        </div>
+        <h1 class="h1" style="max-width: 24ch">A movement assembled, not a campaign launched.</h1>
+        <p class="lead" style="margin-top:36px">A channel is not a strategy. A movement is. What follows is the calibre of the growth function — five complications, each earning its place against a single criterion: does it compound when nobody is watching?</p>
+      </div>
+
+      <!-- Tabs / complications -->
+      <div class="tabs" id="movement-tabs">
+        <button class="tab active" data-tab="mainspring">Mainspring · Organic</button>
+        <button class="tab" data-tab="escapement">Escapement · Paid</button>
+        <button class="tab" data-tab="reserve">Power Reserve · Lifecycle</button>
+        <button class="tab" data-tab="train">Going Train · Automation</button>
+        <button class="tab" data-tab="regulator">Regulator · Intelligence</button>
+      </div>
+
+      <!-- MAINSPRING -->
+      <div class="tab-content active" data-content="mainspring">
+        <div class="eyebrow">Complication 01 · The Mainspring</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 32ch">The engine that runs without external power.</h2>
+        <div class="grid-2" style="margin-top:32px">
+          <p class="p">
+            Of all five complications, the mainspring is the one that compounds without a budget line. Organic moved from 100K weekly impressions to 1.6M — a 55× lift — held against a stable 1.7–2.2% CTR. The work was not keyword chasing. It was building an indexable data product: programmatic watch references, model deep-pages, structured comparison content that earned its place in the result set rather than ranking for it.
+          </p>
+          <p class="p">
+            The lesson inside the numbers: CTR was capped by the SERP form factor, not by effort. Above three million monthly impressions, additional impressions translated to clicks at a flat rate. The growth lever shifted from rank to relevance — from appearing more, to appearing better.
+          </p>
+        </div>
+
+        <div class="chart-head" style="margin-top:56px">
+          <div class="eyebrow">Figure 03 · Monthly organic impressions</div>
+          <div class="ref-no">scale in millions</div>
+        </div>
+        <div class="chart" id="chart-organic"></div>
+
+        <div class="grid-3" style="margin-top:48px">
+          <div class="cert cert--steel">
+            <div class="eyebrow eyebrow--steel">Lifetime impressions</div>
+            <div class="v"><span class="num">41.3</span><span class="unit">M</span></div>
+            <div class="label">2024 — Aug 2025</div>
+          </div>
+          <div class="cert">
+            <div class="eyebrow">Lifetime clicks</div>
+            <div class="v"><span class="num">1.06</span><span class="unit">M</span></div>
+            <div class="label">Free traffic acquired</div>
+          </div>
+          <div class="cert cert--patina">
+            <div class="eyebrow" style="color:#8FA67D">Sustained CTR</div>
+            <div class="v"><span class="num">1.9</span><span class="unit">%</span></div>
+            <div class="label">Vs. category benchmark ~1.4%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCAPEMENT -->
+      <div class="tab-content" data-content="escapement">
+        <div class="eyebrow">Complication 02 · The Escapement</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 32ch">Regulated, precise, controlled energy.</h2>
+        <div class="grid-2" style="margin-top:32px">
+          <p class="p">
+            Most paid programs grow by adding budget. This one grew by refusing to. Spend held at $1,500/month for ten consecutive months — a deliberate ceiling. The output: leads at $0.10–$0.80 each, ROAS rarely below 18×, and a single peak month (May 2025) where the economics ran 105× on every dollar.
+          </p>
+          <p class="p">
+            When budget did expand — June 2025 at $5,140 — ROAS reverted to the mean. That is the read worth keeping. Paid media at this scale is an efficient instrument, not a scalable one. The discipline was to use it for what it is good at, and to refuse the temptation to make it more.
+          </p>
+        </div>
+
+        <div class="chart-head" style="margin-top:56px">
+          <div class="eyebrow">Figure 04 · Leads &amp; ROAS by month</div>
+          <div class="ref-no">13 months · paid only</div>
+        </div>
+        <div class="chart" id="chart-paid"></div>
+
+        <div class="grid-4" style="margin-top:48px">
+          <div class="cert">
+            <div class="eyebrow">Total spend</div>
+            <div class="v"><span class="num">$23.2</span><span class="unit">K</span></div>
+            <div class="label">Aug '24 — Aug '25</div>
+          </div>
+          <div class="cert">
+            <div class="eyebrow">Attributed revenue</div>
+            <div class="v"><span class="num">$787.9</span><span class="unit">K</span></div>
+            <div class="label">34× lifetime</div>
+          </div>
+          <div class="cert cert--patina">
+            <div class="eyebrow" style="color:#8FA67D">Best CPL</div>
+            <div class="v"><span class="num">$0.10</span></div>
+            <div class="label">May 2025</div>
+          </div>
+          <div class="cert cert--amber">
+            <div class="eyebrow eyebrow--amber">Worst CPL</div>
+            <div class="v"><span class="num">$1.10</span></div>
+            <div class="label">Aug 2025 · reset</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POWER RESERVE -->
+      <div class="tab-content" data-content="reserve">
+        <div class="eyebrow">Complication 03 · The Power Reserve</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 36ch">The stored value of every collector who came back.</h2>
+        <div class="grid-2" style="margin-top:32px">
+          <p class="p">
+            Acquisition was solved. Retention was not — and saying so is more useful than dressing it up. The 14% returning rate against a research-heavy collector category implies a leak, not a ceiling. Most users found the product, used it once, and didn&rsquo;t come back inside the measurement window.
+          </p>
+          <p class="p">
+            The architecture this calls for: behavioral segmentation (watch interest, price tier, collector/dealer signal), lifecycle triggers tuned to research patterns (saved searches, price-drop alerts, new-listing matches), and a CRM stack that treats returning users as the principal asset — not as an attribution footnote.
+          </p>
+        </div>
+
+        <h3 class="h3" style="margin-top:56px">The lifecycle map I would build first.</h3>
+        <div class="grid-4" style="margin-top:28px">
+          <div style="border-top:1px solid var(--brass); padding-top:16px">
+            <div class="eyebrow">01</div>
+            <div style="font-family:var(--display); font-size:18px; color:var(--ink); margin-top:10px">First session</div>
+            <p class="p p--small" style="margin-top:12px">Search → discovery → reference page. Capture the intent signal: brand, model, price band.</p>
+          </div>
+          <div style="border-top:1px solid var(--brass); padding-top:16px">
+            <div class="eyebrow">02</div>
+            <div style="font-family:var(--display); font-size:18px; color:var(--ink); margin-top:10px">Activation</div>
+            <p class="p p--small" style="margin-top:12px">Saved-search within 7 days. Price/availability alerts subscribed. Email opted in.</p>
+          </div>
+          <div style="border-top:1px solid var(--brass); padding-top:16px">
+            <div class="eyebrow">03</div>
+            <div style="font-family:var(--display); font-size:18px; color:var(--ink); margin-top:10px">Engagement</div>
+            <p class="p p--small" style="margin-top:12px">Triggered emails: matched listings, price movement, new dealer inventory in the saved interest.</p>
+          </div>
+          <div style="border-top:1px solid var(--brass); padding-top:16px">
+            <div class="eyebrow">04</div>
+            <div style="font-family:var(--display); font-size:18px; color:var(--ink); margin-top:10px">Compounding return</div>
+            <p class="p p--small" style="margin-top:12px">Dealer handoff or marketplace action. Re-engagement on dormancy at week 2, week 6.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOING TRAIN -->
+      <div class="tab-content" data-content="train">
+        <div class="eyebrow">Complication 04 · The Going Train</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 36ch">The gears that transmit force without human hands.</h2>
+        <p class="p" style="margin-top:24px; max-width:72ch">
+          AI is not a column in a budget. It is a force multiplier on work that already exists. The deployment philosophy: replace the labor-intensive parts of the growth function with deterministic, observable, version-controlled automation — and use the recovered hours for the work that compounds.
+        </p>
+
+        <div class="grid-2" style="margin-top:40px">
+          <div style="border-top:1px solid var(--rule); padding-top:20px">
+            <div class="eyebrow">Content production</div>
+            <p class="p p--small" style="margin-top:14px"><b style="color:var(--ink-low); font-weight:500">Built —</b> Template-driven model reference pages with LLM-assisted enrichment. Editorial guardrails on tone.</p>
+            <p class="p p--small" style="margin-top:12px; color:var(--ink)"><b style="color:var(--brass); font-weight:500">Impact —</b> From 20 hand-built pages per quarter to thousands of indexable, structured pages per month — without erosion of quality signal.</p>
+          </div>
+          <div style="border-top:1px solid var(--rule); padding-top:20px">
+            <div class="eyebrow">Campaign operations</div>
+            <p class="p p--small" style="margin-top:14px"><b style="color:var(--ink-low); font-weight:500">Built —</b> Bid management against ROAS targets, weekly anomaly detection, automatic pause on CPL drift greater than 25%.</p>
+            <p class="p p--small" style="margin-top:12px; color:var(--ink)"><b style="color:var(--brass); font-weight:500">Impact —</b> The May 2025 ROAS peak was held against drift because the system caught a competitor pulling spend faster than a human would.</p>
+          </div>
+          <div style="border-top:1px solid var(--rule); padding-top:20px">
+            <div class="eyebrow">Analytics &amp; reporting</div>
+            <p class="p p--small" style="margin-top:14px"><b style="color:var(--ink-low); font-weight:500">Built —</b> Unified data layer from GA4, Search Console, Ads, CRM. Weekly executive briefs with annotated commentary.</p>
+            <p class="p p--small" style="margin-top:12px; color:var(--ink)"><b style="color:var(--brass); font-weight:500">Impact —</b> Decisions move from monthly to weekly. The team spends time on inference, not on assembling the spreadsheet.</p>
+          </div>
+          <div style="border-top:1px solid var(--rule); padding-top:20px">
+            <div class="eyebrow">Lifecycle messaging</div>
+            <p class="p p--small" style="margin-top:14px"><b style="color:var(--ink-low); font-weight:500">Built —</b> LLM-generated personalised email variants tied to user behavioural segments. A/B-tested at the segment level, not the campaign level.</p>
+            <p class="p p--small" style="margin-top:12px; color:var(--ink)"><b style="color:var(--brass); font-weight:500">Impact —</b> Hypothesis: a 5–8 point lift in returning-user rate within two quarters. Worth the engineering investment to find out.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGULATOR -->
+      <div class="tab-content" data-content="regulator">
+        <div class="eyebrow">Complication 05 · The Regulator</div>
+        <h2 class="h2" style="margin-top:12px; max-width: 32ch">Measures everything. Adjusts everything.</h2>
+        <div class="grid-2" style="margin-top:32px">
+          <p class="p">
+            The analytics function is the part of growth that gets cut first and missed last. Built properly, it is the difference between a team that ships and a team that knows what shipping did. The stack here unifies GA4, Google Ads, Search Console, and a CRM-side event spine — fed through a single warehouse, modelled into a dbt-style semantic layer, and surfaced through weekly executive briefs.
+          </p>
+          <p class="p">
+            The output is not dashboards for their own sake. The output is decisions made faster, with fewer arguments, and with a shared version of the truth. The May 2025 ROAS peak was caught on a Tuesday; the response — what to scale, what to hold — was on the table by Wednesday.
+          </p>
+        </div>
+
+        <div class="grid-3" style="margin-top:48px">
+          <div class="cert">
+            <div class="eyebrow">Reporting cadence</div>
+            <div class="v"><span class="num">W</span></div>
+            <div class="label">Weekly · automated brief</div>
+          </div>
+          <div class="cert cert--steel">
+            <div class="eyebrow eyebrow--steel">Data sources unified</div>
+            <div class="v"><span class="num">6</span><span class="unit">+</span></div>
+            <div class="label">GA4 · GSC · Ads · CRM · Listings · Stripe</div>
+          </div>
+          <div class="cert cert--patina">
+            <div class="eyebrow" style="color:#8FA67D">Decision latency</div>
+            <div class="v"><span class="num">&lt;48</span><span class="unit">h</span></div>
+            <div class="label">Signal to action</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ IV. THE LOUPE ============ -->
+    <section id="loupe">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">IV.</span><span class="sep">·</span>
+          <span class="subtitle">The Loupe · Three lots, examined under magnification</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">Three decisions, opened up.</h1>
+        <p class="lead" style="margin-top:36px">A growth function is a record of choices, most made with incomplete information. Below: three of the ones that mattered, presented as you would find them in an auction catalogue — with provenance, condition, and the honest read.</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <!-- LOT 01 -->
+        <article class="lot" data-lot="1">
+          <div class="lot-side">
+            <div class="lot-no">Lot</div>
+            <div class="lot-id">01</div>
+            <div class="lot-tag">June 2024</div>
+            <svg class="lot-icon" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="32" stroke="#8A6F38" stroke-width="0.7" />
+              <circle cx="40" cy="40" r="20" stroke="#5C4F38" stroke-width="0.4" />
+              <line x1="40" y1="8"  x2="40" y2="16" stroke="#8A6F38" stroke-width="0.6" />
+              <line x1="40" y1="64" x2="40" y2="72" stroke="#8A6F38" stroke-width="0.6" />
+              <line x1="8"  y1="40" x2="16" y2="40" stroke="#8A6F38" stroke-width="0.6" />
+              <line x1="64" y1="40" x2="72" y2="40" stroke="#8A6F38" stroke-width="0.6" />
+              <circle cx="40" cy="40" r="1.5" fill="#C8A763" />
+            </svg>
+          </div>
+          <div class="lot-main">
+            <h3 class="lot-title">The first inflection — from a flat baseline to a content engine.</h3>
+            <p class="lot-summary">Why 4,538 monthly users became 32,014 in thirty days — and why I refuse to call it lucky.</p>
+            <button class="lot-toggle">
+              <span>Inspect under the loupe</span>
+              <span class="plus">+</span>
+            </button>
+            <div class="lot-detail">
+              <div class="process-row">
+                <div>
+                  <div class="marker">Observation</div>
+                  <div class="label-d">What was true.</div>
+                </div>
+                <div class="body">Through May 2024, monthly new users had oscillated between 4.5K and 17.7K with no clear trend. The acquisition surface was small, the content surface was smaller, and the marketplace was effectively invisible to search.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Hypothesis</div>
+                  <div class="label-d">What I believed.</div>
+                </div>
+                <div class="body">The category has long-tail evergreen search demand that compounds. Traffic was flat not because of market interest, but because of distribution. If we built a structured content layer indexed against actual watch reference data, search would find it.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--steel">Validation</div>
+                  <div class="label-d">What proved it.</div>
+                </div>
+                <div class="body">We piloted programmatic content against the highest-intent long tail — specific reference numbers, model-year deep pages, comparison sets. Within four weeks, indexed pages cleared 10× prior coverage; CTR on the new pages held at 1.8–2.4%.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Decision</div>
+                  <div class="label-d">What was chosen.</div>
+                </div>
+                <div class="body">Lean in. Scale the content engine from pilot to production system. Hold paid budget flat — the marginal lead from organic was below the marginal lead from paid by a factor of ten.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--patina">Result</div>
+                  <div class="label-d">What followed.</div>
+                </div>
+                <div class="body">June 2024: new users moved from 4,538 to 32,014. The trajectory has not reverted since. Organic became the largest contributor to the funnel without ever appearing on a P&amp;L.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--amber">Recommendation</div>
+                  <div class="label-d">What comes next.</div>
+                </div>
+                <div class="body">The same pattern is available on the dealer side — programmatic listing pages, structured availability data, dealer reference content. The next 10× lift is not on the collector side. It is on the supply side.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- LOT 02 -->
+        <article class="lot" data-lot="2">
+          <div class="lot-side">
+            <div class="lot-no">Lot</div>
+            <div class="lot-id">02</div>
+            <div class="lot-tag">May 2025</div>
+            <svg class="lot-icon" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="32" stroke="#8A6F38" stroke-width="0.7" />
+              <path d="M 12 40 L 40 20 L 68 40 L 40 60 Z" stroke="#8A6F38" stroke-width="0.6" fill="none" />
+              <circle cx="40" cy="40" r="6" stroke="#C8A763" stroke-width="0.6" fill="none" />
+              <circle cx="40" cy="40" r="2" fill="#C8A763" />
+            </svg>
+          </div>
+          <div class="lot-main">
+            <h3 class="lot-title">The 105× ROAS peak — and the honest read of it.</h3>
+            <p class="lot-summary">What happened, why it happened, and why I would not promise it could happen again.</p>
+            <button class="lot-toggle">
+              <span>Inspect under the loupe</span>
+              <span class="plus">+</span>
+            </button>
+            <div class="lot-detail">
+              <div class="process-row">
+                <div>
+                  <div class="marker">Observation</div>
+                  <div class="label-d">What was true.</div>
+                </div>
+                <div class="body">May 2025 returned $160,393 of attributed revenue on $1,520 of paid spend — a 105× ROAS month against a 13-month average closer to 34×. CPL hit $0.10. CVR hit 214.9%.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Hypothesis</div>
+                  <div class="label-d">What I believed.</div>
+                </div>
+                <div class="body">The peak was not a single cause but a confluence: low CPC from a competitor pulling spend, an unusually strong CTR driven by a content-tailwind month, and a CVR amplified by lifecycle messaging into a primed audience.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--steel">Validation</div>
+                  <div class="label-d">What proved it.</div>
+                </div>
+                <div class="body">When we tried to push budget to capture the moment — June 2025, $5,140 spend — ROAS reverted to 30.9×. The auction dynamic that produced May was gone within three weeks.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Decision</div>
+                  <div class="label-d">What was chosen.</div>
+                </div>
+                <div class="body">Hold the win. Do not let an exceptional month set the planning baseline for the next quarter. Annotate the moment in the executive notes so future budget conversations remember what 105× actually required.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--patina">Result</div>
+                  <div class="label-d">What followed.</div>
+                </div>
+                <div class="body">Aug 2025 reset the team&rsquo;s calibration: CPL drifted to $1.10, ROAS to 13.7×. The system caught the drift inside a week. Budget cut to $1,140; efficiency floor protected.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--amber">Recommendation</div>
+                  <div class="label-d">What comes next.</div>
+                </div>
+                <div class="body">Peaks like May are gifts, not strategies. The system to keep is the one that catches them when they appear, and walks away gracefully when they end. Most teams fail at the walking-away.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- LOT 03 -->
+        <article class="lot" data-lot="3">
+          <div class="lot-side">
+            <div class="lot-no">Lot</div>
+            <div class="lot-id">03</div>
+            <div class="lot-tag">Q3 2025</div>
+            <svg class="lot-icon" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="32" stroke="#8A6F38" stroke-width="0.7" />
+              <path d="M 18 50 Q 28 30 40 38 Q 52 46 62 28" stroke="#C97A4C" stroke-width="0.9" fill="none" />
+              <circle cx="18" cy="50" r="2" fill="#C97A4C" />
+              <circle cx="40" cy="38" r="2" fill="#C97A4C" />
+              <circle cx="62" cy="28" r="2" fill="#C97A4C" />
+            </svg>
+          </div>
+          <div class="lot-main">
+            <h3 class="lot-title">Efficiency erosion — reading the signal correctly.</h3>
+            <p class="lot-summary">When the CPL drift began, the right answer was to cut spend, not to spend more diagnosing.</p>
+            <button class="lot-toggle">
+              <span>Inspect under the loupe</span>
+              <span class="plus">+</span>
+            </button>
+            <div class="lot-detail">
+              <div class="process-row">
+                <div>
+                  <div class="marker">Observation</div>
+                  <div class="label-d">What was true.</div>
+                </div>
+                <div class="body">Across July and August 2025, CPL drifted from $0.50 → $0.80 → $1.10. CVR collapsed from 114% → 62% → 28%. Spend, meanwhile, had been expanded based on May&rsquo;s signal.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Hypothesis</div>
+                  <div class="label-d">What I believed.</div>
+                </div>
+                <div class="body">Two possibilities: the audience was saturating (deeper-funnel users had already converted), or the creative had decayed against the segment. Both pointed in the same direction — pull spend.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--steel">Validation</div>
+                  <div class="label-d">What proved it.</div>
+                </div>
+                <div class="body">We tested isolated creative refresh without budget cut. Lift was marginal. The clearer signal was audience exhaustion at current targeting. Continuing to spend was buying lower-quality leads at higher costs.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker">Decision</div>
+                  <div class="label-d">What was chosen.</div>
+                </div>
+                <div class="body">Cut spend by half in two consecutive months. Hold the team&rsquo;s instinct to optimise the campaign; the campaign was not the problem. The problem was the question being asked of it.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--patina">Result</div>
+                  <div class="label-d">What followed.</div>
+                </div>
+                <div class="body">August 2025: $1,140 spend produced 1,040 leads at $15,590 revenue — ROAS 13.7×. Lower in absolute terms; the right floor for an exhausted audience.</div>
+              </div>
+              <div class="process-row">
+                <div>
+                  <div class="marker marker--amber">Recommendation</div>
+                  <div class="label-d">What comes next.</div>
+                </div>
+                <div class="body">Build the next audience layer before reopening spend. Dealer-side targeting, retention-cohort lookalikes, and a refreshed creative system tied to lifecycle behaviour — not to channel templates.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ V. THE CRAFT ============ -->
+    <section id="craft">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">V.</span><span class="sep">·</span>
+          <span class="subtitle">The Craft · Every choice forecloses another</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">A craft is, in the end, a discipline of refusal.</h1>
+        <p class="lead" style="margin-top:36px">Strategic thinking shows up in what gets named, not what gets celebrated. Below: four trade-offs the growth function made, with the cost made explicit alongside the payoff.</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <article class="trade">
+          <div class="trade-side">
+            <div class="eyebrow">Trade-off 01</div>
+            <h3 class="h3" style="margin-top:14px">Speed vs. compounding.</h3>
+            <div class="chosen">Chose<span class="chosen-v">Compounding.</span></div>
+          </div>
+          <div class="trade-cells">
+            <div class="trade-cell trade-cell--cost"><div class="cell-label">The cost</div><div class="cell-body">We left short-term growth on the table for six months while we built the content engine. The pressure to spend on paid acquisition was constant.</div></div>
+            <div class="trade-cell trade-cell--payoff"><div class="cell-label">The payoff</div><div class="cell-body">By month nine, the compounding side carried the curve. By month fifteen, paid was a scalpel, not a lifeline.</div></div>
+            <div class="trade-cell trade-cell--lesson"><div class="cell-label">The lesson</div><div class="cell-body">Most growth teams default to speed because it is legible. The case for compounding has to be made deliberately, repeatedly, against quarterly pressure.</div></div>
+          </div>
+        </article>
+
+        <article class="trade">
+          <div class="trade-side">
+            <div class="eyebrow">Trade-off 02</div>
+            <h3 class="h3" style="margin-top:14px">Brand vs. demand.</h3>
+            <div class="chosen">Chose<span class="chosen-v">Demand, with brand discipline.</span></div>
+          </div>
+          <div class="trade-cells">
+            <div class="trade-cell trade-cell--cost"><div class="cell-label">The cost</div><div class="cell-body">We did not run brand-led campaigns. We did not buy awareness for its own sake. EveryWatch is less recognised than it could be.</div></div>
+            <div class="trade-cell trade-cell--payoff"><div class="cell-label">The payoff</div><div class="cell-body">Every dollar was attributable. Every channel was held to a return. The brand was earned through repeated, useful interaction — not bought.</div></div>
+            <div class="trade-cell trade-cell--lesson"><div class="cell-label">The lesson</div><div class="cell-body">Brand and demand are not opposed. Demand work, done well, becomes brand. The opposite is far less reliable.</div></div>
+          </div>
+        </article>
+
+        <article class="trade">
+          <div class="trade-side">
+            <div class="eyebrow">Trade-off 03</div>
+            <h3 class="h3" style="margin-top:14px">Custom build vs. paid tooling.</h3>
+            <div class="chosen">Chose<span class="chosen-v">Build what compounds; rent what doesn&rsquo;t.</span></div>
+          </div>
+          <div class="trade-cells">
+            <div class="trade-cell trade-cell--cost"><div class="cell-label">The cost</div><div class="cell-body">The analytics and content automation infrastructure consumed engineering hours that could have shipped product features.</div></div>
+            <div class="trade-cell trade-cell--payoff"><div class="cell-label">The payoff</div><div class="cell-body">The team owns the data layer. Decisions move faster because the question doesn&rsquo;t have to be re-asked of a vendor.</div></div>
+            <div class="trade-cell trade-cell--lesson"><div class="cell-label">The lesson</div><div class="cell-body">Tools you rent become tools you depend on. The ones that touch the asset — content, data, lifecycle logic — belong in-house.</div></div>
+          </div>
+        </article>
+
+        <article class="trade">
+          <div class="trade-side">
+            <div class="eyebrow">Trade-off 04</div>
+            <h3 class="h3" style="margin-top:14px">Collector funnel vs. dealer acquisition.</h3>
+            <div class="chosen">Chose<span class="chosen-v">Collector first; dealer next.</span></div>
+          </div>
+          <div class="trade-cells">
+            <div class="trade-cell trade-cell--cost"><div class="cell-label">The cost</div><div class="cell-body">Dealer-side density grew slower than collector-side audience. There is a supply-side debt accruing.</div></div>
+            <div class="trade-cell trade-cell--payoff"><div class="cell-label">The payoff</div><div class="cell-body">A collector audience of this size makes the dealer pitch easier — and dramatically reduces dealer CAC when we open that channel.</div></div>
+            <div class="trade-cell trade-cell--lesson"><div class="cell-label">The lesson</div><div class="cell-body">In a marketplace, sequence matters as much as strategy. We built the demand magnet first because the supply pitch needs it. Now is the moment to spend it.</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ VI. THE INTELLIGENCE ============ -->
+    <section id="intelligence">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">VI.</span><span class="sep">·</span>
+          <span class="subtitle">The Intelligence · Numbers, with the cause attached</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">A number carries its reason, or it is decoration.</h1>
+        <p class="lead" style="margin-top:36px">A figure on its own is not intelligence. A figure with the reason it moved, and the action it calls for, is. Below: the four most consequential metrics of the period — each opened up.</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="metric-block">
+          <div class="eyebrow">Metric 01 · User trajectory</div>
+          <h3 class="metric-headline">From 9,113 to 182,782 monthly new users.</h3>
+          <div class="metric-cells">
+            <div class="metric-cell metric-cell--obs"><div class="ml">Observation</div><div class="mb">The curve clears two clear inflections (Jun '24, Jan '25). Both correspond to system shifts, not campaign launches.</div></div>
+            <div class="metric-cell metric-cell--cause"><div class="ml">What caused it</div><div class="mb">Content engine production scale-up in mid-2024; sustained organic compounding and a tightened paid–lifecycle interplay through Q4 2024 and into 2025.</div></div>
+            <div class="metric-cell metric-cell--next"><div class="ml">What I&rsquo;d do next</div><div class="mb">Pivot the growth investment from acquisition to retention. The next 10× is not on the curve — it is below it, in the 14% returning-user rate.</div></div>
+          </div>
+        </div>
+
+        <div class="metric-block">
+          <div class="eyebrow">Metric 02 · Paid ROAS</div>
+          <h3 class="metric-headline">Lifetime 34×, peak 105×, current 13.7×.</h3>
+          <div class="metric-cells">
+            <div class="metric-cell metric-cell--obs"><div class="ml">Observation</div><div class="mb">The May 2025 peak was a confluence event, not a baseline. Aug 2025 reset the calibration cleanly.</div></div>
+            <div class="metric-cell metric-cell--cause"><div class="ml">What caused it</div><div class="mb">Audience saturation at the current targeting layer combined with creative decay. Spend expansion in June pulled forward demand from July–August.</div></div>
+            <div class="metric-cell metric-cell--next"><div class="ml">What I&rsquo;d do next</div><div class="mb">Hold spend at floor. Open a new audience layer — dealer-side targeting, retention-cohort lookalikes — before reopening budget.</div></div>
+          </div>
+        </div>
+
+        <div class="metric-block">
+          <div class="eyebrow">Metric 03 · Organic CTR plateau</div>
+          <h3 class="metric-headline">CTR held at 1.7–2.5% while impressions grew 55×.</h3>
+          <div class="metric-cells">
+            <div class="metric-cell metric-cell--obs"><div class="ml">Observation</div><div class="mb">The ratio of clicks to impressions flattened above 3M monthly impressions — a SERP form-factor ceiling, not an effort ceiling.</div></div>
+            <div class="metric-cell metric-cell--cause"><div class="ml">What caused it</div><div class="mb">At scale, additional impressions are weighted toward lower-position results and zero-click answer boxes. The marginal impression is a brand impression, not a click.</div></div>
+            <div class="metric-cell metric-cell--next"><div class="ml">What I&rsquo;d do next</div><div class="mb">Stop optimising for click rate; optimise for the kinds of impressions that compound brand recognition. Track returning organic users as the lagging indicator.</div></div>
+          </div>
+        </div>
+
+        <div class="metric-block">
+          <div class="eyebrow">Metric 04 · Returning collector rate</div>
+          <h3 class="metric-headline">14% of total. Flat.</h3>
+          <div class="metric-cells">
+            <div class="metric-cell metric-cell--obs"><div class="ml">Observation</div><div class="mb">The returning-user share has stayed proportional through the audience expansion — the wrong shape for a research-heavy category.</div></div>
+            <div class="metric-cell metric-cell--cause"><div class="ml">What caused it</div><div class="mb">Lifecycle infrastructure was the deferred investment. Acquisition was solved first because it was the gating constraint.</div></div>
+            <div class="metric-cell metric-cell--next"><div class="ml">What I&rsquo;d do next</div><div class="mb">Build the lifecycle stack as the next major capability. A 5-point lift in returning rate within two quarters — a zero-incremental-spend lever with eight-figure compounding effect.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VII. THE OBSERVATORY ============ -->
+    <section id="observatory">
+      <div class="opener">
+        <div class="crumb">
+          <span class="roman">VII.</span><span class="sep">·</span>
+          <span class="subtitle">The Observatory · Where the chronometer is tested</span>
+        </div>
+        <h1 class="h1" style="max-width: 22ch">If I joined tomorrow.</h1>
+        <p class="lead" style="margin-top:36px">The Observatory is where the chronometer is tested for accuracy across positions and temperatures — the place where the work meets the discipline. The same way I would start at EveryWatch: instrument before action, measure before scale, plug leaks before opening taps.</p>
+      </div>
+      <div class="divider"></div>
+
+      <!-- Operating principles -->
+      <div class="section">
+        <div class="eyebrow">Operating principles</div>
+        <div class="grid-2" style="margin-top:32px">
+          <div class="principle">
+            <div class="roman">— i.</div>
+            <div>
+              <h3 class="h3">Measure first.</h3>
+              <p class="p" style="margin-top:12px">Every channel earns its instrumentation before it earns its budget. A growth function that ships ahead of its analytics is buying lottery tickets.</p>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="roman">— ii.</div>
+            <div>
+              <h3 class="h3">Plug leaks before scaling.</h3>
+              <p class="p" style="margin-top:12px">A 5% lift in retention compounds harder than a 15% reduction in CPL. The instinct is the opposite. The math is not.</p>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="roman">— iii.</div>
+            <div>
+              <h3 class="h3">Movements over campaigns.</h3>
+              <p class="p" style="margin-top:12px">A campaign is an event. A movement is a compounding asset. If a result cannot be re-produced without rebuilding it, it was not real.</p>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="roman">— iv.</div>
+            <div>
+              <h3 class="h3">Automate the routine.</h3>
+              <p class="p" style="margin-top:12px">The leverage is not in the unrepeatable moment. It is in everything below it that should not need a human at all.</p>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="roman">— v.</div>
+            <div>
+              <h3 class="h3">Data with context, or not at all.</h3>
+              <p class="p" style="margin-top:12px">A number without a cause is decoration. The brief that begins &ldquo;metrics are up&rdquo; is the one that ends with a board meeting going badly.</p>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="roman">— vi.</div>
+            <div>
+              <h3 class="h3">Compounding over shortcuts.</h3>
+              <p class="p" style="margin-top:12px">Six months of foundational work beats six weeks of optics every time. The discipline is to be patient in public.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 90-day plan -->
+      <div class="section">
+        <div class="eyebrow">The first ninety days</div>
+        <h2 class="h2" style="margin-top:14px">A plan, not a pitch.</h2>
+
+        <div style="margin-top:36px">
+          <div class="day-block">
+            <div>
+              <div class="day-window">Days 0 — 30</div>
+              <div class="day-label">Measure.</div>
+            </div>
+            <div class="day-items">
+              <div class="day-item"><span class="ix">01</span><span class="txt">Channel-level cohort retention across all surfaces (acquisition source × week × action density).</span></div>
+              <div class="day-item"><span class="ix">02</span><span class="txt">Dealer side of the marketplace: listings per dealer, supply velocity, demand pressure ratio.</span></div>
+              <div class="day-item"><span class="ix">03</span><span class="txt">Lifecycle instrumentation gaps: which user actions are not currently logged but should be.</span></div>
+              <div class="day-item"><span class="ix">04</span><span class="txt">Decision log started — every meaningful call captured with the loupe framework from Chapter IV.</span></div>
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div>
+              <div class="day-window">Days 30 — 60</div>
+              <div class="day-label">Fix the leaks.</div>
+            </div>
+            <div class="day-items">
+              <div class="day-item"><span class="ix">01</span><span class="txt">Lifecycle messaging: saved-search alerts, price-movement triggers, dormancy re-engagement.</span></div>
+              <div class="day-item"><span class="ix">02</span><span class="txt">Onboarding flow tuned to collector research behaviour, not e-commerce defaults.</span></div>
+              <div class="day-item"><span class="ix">03</span><span class="txt">Dealer-side experimentation: structured listing pages, supply-density content, dealer CRM.</span></div>
+              <div class="day-item"><span class="ix">04</span><span class="txt">Paid floor protected — no expansion before the retention curve moves.</span></div>
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div>
+              <div class="day-window">Days 60 — 90</div>
+              <div class="day-label">Build the systems.</div>
+            </div>
+            <div class="day-items">
+              <div class="day-item"><span class="ix">01</span><span class="txt">Lifecycle automation graduates from MVP to platform — segment-level testing, version control on creative.</span></div>
+              <div class="day-item"><span class="ix">02</span><span class="txt">Unified data layer extends to dealer-side metrics; weekly executive brief covers both sides.</span></div>
+              <div class="day-item"><span class="ix">03</span><span class="txt">First major audience-layer expansion in paid, against the new retention-cohort lookalikes.</span></div>
+              <div class="day-item"><span class="ix">04</span><span class="txt">Operating cadence documented; the growth function should run without me for two weeks.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:80px; border-top: 1px solid var(--brass); padding-top: 32px">
+          <div class="eyebrow">Closing</div>
+          <p class="lead" style="margin-top:20px; max-width: 60ch">
+            The growth function is a system of compounding decisions, made under uncertainty, on behalf of a business whose customers deserve better than what they usually get. That is the work. I would be glad to do it again.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="footer-row">
+        <div class="footer-left">
+          <div class="name">Daniel Deepak</div>
+          <div class="role">Senior Growth · Performance · Analytics</div>
+        </div>
+        <div class="footer-right">
+          dannygrowthmarketing<br>
+          Bangalore · India<br>
+          Reference 24/25 · Working Document
+        </div>
+      </div>
+      <div class="colophon">
+        <span>Set in Cormorant Garamond &amp; Inter · Annotations in JetBrains Mono</span>
+        <span>Atelier · Anno 2026</span>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   Live seconds counter — the heartbeat
+   ============================================================ */
+(function tick() {
+  const clk = document.getElementById('clock');
+  const secs = document.getElementById('secs');
+  function pad(n) { return n.toString().padStart(2, '0'); }
+  function update() {
+    const d = new Date();
+    if (clk)  clk.textContent  = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    if (secs) secs.textContent = pad(d.getSeconds());
+  }
+  update();
+  setInterval(update, 1000);
+})();
+
+/* ============================================================
+   Navigation — smooth scroll & active state
+   ============================================================ */
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-target');
+    const el = document.getElementById(target);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Observe sections to highlight active nav item
+(function observe() {
+  const sections = document.querySelectorAll('section[id]');
+  const items = document.querySelectorAll('.nav-item');
+  const map = {};
+  items.forEach(i => map[i.getAttribute('data-target')] = i);
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && map[e.target.id]) {
+        items.forEach(i => i.classList.remove('active'));
+        map[e.target.id].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+
+  sections.forEach(s => obs.observe(s));
+})();
+
+/* ============================================================
+   Movement tabs (Chapter III)
+   ============================================================ */
+document.querySelectorAll('#movement-tabs .tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const id = tab.getAttribute('data-tab');
+    document.querySelectorAll('#movement-tabs .tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('[data-content]').forEach(c => c.classList.remove('active'));
+    document.querySelector('[data-content="' + id + '"]').classList.add('active');
+  });
+});
+
+/* ============================================================
+   The Loupe — expand/collapse lots
+   ============================================================ */
+document.querySelectorAll('.lot-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const lot = btn.closest('.lot');
+    lot.classList.toggle('open');
+  });
+});
+
+/* ============================================================
+   Custom SVG charts — hand-engraved, no library
+   ============================================================ */
+const USERS = [
+  { m: "Jan '24", v: 9113 },   { m: "Feb '24", v: 17660 },  { m: "Mar '24", v: 6716 },
+  { m: "Apr '24", v: 5935 },   { m: "May '24", v: 4538 },   { m: "Jun '24", v: 32014 },
+  { m: "Jul '24", v: 24597 },  { m: "Aug '24", v: 40904 },  { m: "Sep '24", v: 60078 },
+  { m: "Oct '24", v: 87490 },  { m: "Nov '24", v: 108240 }, { m: "Dec '24", v: 105505 },
+  { m: "Jan '25", v: 163896 }, { m: "Feb '25", v: 156098 }, { m: "Mar '25", v: 153103 },
+  { m: "Apr '25", v: 167819 }, { m: "May '25", v: 182782 }
+];
+
+const RETURNING = [
+  { m: "Jan '24", total: 9794,   ret: 681 },
+  { m: "Feb '24", total: 18573,  ret: 913 },
+  { m: "Mar '24", total: 7781,   ret: 1065 },
+  { m: "Apr '24", total: 6792,   ret: 857 },
+  { m: "May '24", total: 4811,   ret: 273 },
+  { m: "Jun '24", total: 33867,  ret: 1853 },
+  { m: "Jul '24", total: 27431,  ret: 2834 },
+  { m: "Aug '24", total: 43404,  ret: 2500 },
+  { m: "Sep '24", total: 63367,  ret: 3289 },
+  { m: "Oct '24", total: 64274,  ret: 3500 },
+  { m: "Nov '24", total: 117276, ret: 9036 },
+  { m: "Dec '24", total: 116504, ret: 10999 },
+  { m: "Jan '25", total: 179057, ret: 15161 },
+  { m: "Feb '25", total: 174615, ret: 18517 },
+  { m: "Mar '25", total: 170617, ret: 17514 },
+  { m: "Apr '25", total: 186023, ret: 18204 },
+  { m: "May '25", total: 203649, ret: 20867 }
+];
+
+const ORGANIC = [
+  { m: "Jan '24", v: 0.10 }, { m: "Feb '24", v: 0.15 }, { m: "Mar '24", v: 0.22 },
+  { m: "Apr '24", v: 0.54 }, { m: "May '24", v: 1.05 }, { m: "Jun '24", v: 1.32 },
+  { m: "Jul '24", v: 0.77 }, { m: "Aug '24", v: 0.95 }, { m: "Sep '24", v: 1.26 },
+  { m: "Oct '24", v: 1.79 }, { m: "Nov '24", v: 1.89 }, { m: "Dec '24", v: 2.11 },
+  { m: "Jan '25", v: 2.83 }, { m: "Feb '25", v: 3.16 }, { m: "Mar '25", v: 3.42 },
+  { m: "Apr '25", v: 3.94 }, { m: "May '25", v: 5.23 }, { m: "Jun '25", v: 5.51 },
+  { m: "Jul '25", v: 5.44 }
+];
+
+const PAID = [
+  { m: "Aug '24", leads: 1420,  roas: 18.3 },
+  { m: "Sep '24", leads: 1380,  roas: 17.5 },
+  { m: "Oct '24", leads: 3850,  roas: 38.0 },
+  { m: "Nov '24", leads: 3380,  roas: 33.3 },
+  { m: "Dec '24", leads: 2950,  roas: 28.9 },
+  { m: "Jan '25", leads: 3260,  roas: 32.1 },
+  { m: "Feb '25", leads: 2840,  roas: 28.0 },
+  { m: "Mar '25", leads: 3390,  roas: 33.4 },
+  { m: "Apr '25", leads: 4700,  roas: 46.4 },
+  { m: "May '25", leads: 10700, roas: 105.5 },
+  { m: "Jun '25", leads: 10600, roas: 30.9 },
+  { m: "Jul '25", leads: 3050,  roas: 18.9 },
+  { m: "Aug '25", leads: 1040,  roas: 13.7 }
+];
+
+function buildAreaChart(containerId, data, options) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  const opts = Object.assign({
+    width: 1000, height: 320, padL: 50, padR: 20, padT: 20, padB: 40,
+    color: '#C8A763', accent: '#8A6F38',
+    yFmt: v => v.toLocaleString(),
+    yKey: 'v',
+    inflections: []
+  }, options || {});
+
+  const max = Math.max(...data.map(d => d[opts.yKey])) * 1.08;
+  const min = 0;
+  const cw = opts.width - opts.padL - opts.padR;
+  const ch = opts.height - opts.padT - opts.padB;
+  const stepX = cw / (data.length - 1);
+
+  const x = (i) => opts.padL + i * stepX;
+  const y = (v) => opts.padT + ch - ((v - min) / (max - min)) * ch;
+
+  // Y axis grid
+  const gridLines = 4;
+  let gridY = '';
+  let yLabels = '';
+  for (let i = 0; i <= gridLines; i++) {
+    const yv = min + (max - min) * (i / gridLines);
+    const yp = y(yv);
+    gridY += `<line x1="${opts.padL}" y1="${yp}" x2="${opts.padL + cw}" y2="${yp}" stroke="#3A332A" stroke-width="0.5" />`;
+    yLabels += `<text x="${opts.padL - 8}" y="${yp + 3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${opts.yFmt(yv)}</text>`;
+  }
+
+  // Area path
+  let pathArea = `M ${x(0)} ${y(0)} `;
+  data.forEach((d, i) => { pathArea += `L ${x(i)} ${y(d[opts.yKey])} `; });
+  pathArea += `L ${x(data.length - 1)} ${y(0)} Z`;
+
+  // Line path
+  let pathLine = '';
+  data.forEach((d, i) => { pathLine += (i === 0 ? 'M ' : 'L ') + x(i) + ' ' + y(d[opts.yKey]) + ' '; });
+
+  // X labels (every 2nd)
+  let xLabels = '';
+  data.forEach((d, i) => {
+    if (i % 2 === 0 || i === data.length - 1) {
+      xLabels += `<text x="${x(i)}" y="${opts.padT + ch + 18}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${d.m}</text>`;
+    }
+  });
+
+  // Inflection markers
+  let infl = '';
+  opts.inflections.forEach(m => {
+    const idx = data.findIndex(d => d.m === m.label);
+    if (idx >= 0) {
+      infl += `<line x1="${x(idx)}" y1="${opts.padT}" x2="${x(idx)}" y2="${opts.padT + ch}" stroke="${opts.accent}" stroke-width="0.6" stroke-dasharray="3 4" />`;
+      infl += `<text x="${x(idx)}" y="${opts.padT - 6}" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="${opts.accent}" letter-spacing="1">${m.note}</text>`;
+    }
+  });
+
+  // Data dots
+  let dots = '';
+  data.forEach((d, i) => {
+    dots += `<circle cx="${x(i)}" cy="${y(d[opts.yKey])}" r="1.8" fill="${opts.color}" />`;
+  });
+
+  const svg = `
+    <svg viewBox="0 0 ${opts.width} ${opts.height}" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="${containerId}-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${opts.color}" stop-opacity="0.4" />
+          <stop offset="100%" stop-color="${opts.color}" stop-opacity="0.02" />
+        </linearGradient>
+      </defs>
+      ${gridY}
+      ${infl}
+      <path d="${pathArea}" fill="url(#${containerId}-grad)" stroke="none" />
+      <path d="${pathLine}" fill="none" stroke="${opts.color}" stroke-width="1.4" stroke-linejoin="round" />
+      ${dots}
+      ${yLabels}
+      ${xLabels}
+    </svg>
+  `;
+  c.innerHTML = svg;
+}
+
+function buildBarLineChart(containerId, data, options) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  const opts = Object.assign({
+    width: 1000, height: 320, padL: 50, padR: 50, padT: 20, padB: 40,
+    barKey: 'leads', lineKey: 'roas',
+    barColor: '#4D6B8E', lineColor: '#C8A763',
+  }, options || {});
+
+  const maxBar = Math.max(...data.map(d => d[opts.barKey])) * 1.1;
+  const maxLine = Math.max(...data.map(d => d[opts.lineKey])) * 1.1;
+  const cw = opts.width - opts.padL - opts.padR;
+  const ch = opts.height - opts.padT - opts.padB;
+  const stepX = cw / data.length;
+
+  const x = (i) => opts.padL + i * stepX + stepX * 0.5;
+  const yBar  = (v) => opts.padT + ch - (v / maxBar) * ch;
+  const yLine = (v) => opts.padT + ch - (v / maxLine) * ch;
+
+  // Grid
+  let gridY = '';
+  let yLabelsL = '';
+  let yLabelsR = '';
+  for (let i = 0; i <= 4; i++) {
+    const yv = (maxBar) * (i / 4);
+    const yp = opts.padT + ch - (i / 4) * ch;
+    gridY += `<line x1="${opts.padL}" y1="${yp}" x2="${opts.padL + cw}" y2="${yp}" stroke="#3A332A" stroke-width="0.5" />`;
+    yLabelsL += `<text x="${opts.padL - 8}" y="${yp + 3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${Math.round(yv).toLocaleString()}</text>`;
+    const rv = maxLine * (i / 4);
+    yLabelsR += `<text x="${opts.padL + cw + 8}" y="${yp + 3}" text-anchor="start" font-family="JetBrains Mono" font-size="9" fill="${opts.lineColor}">${Math.round(rv)}×</text>`;
+  }
+
+  // Bars
+  let bars = '';
+  data.forEach((d, i) => {
+    const bw = stepX * 0.6;
+    const bx = opts.padL + i * stepX + (stepX - bw) / 2;
+    const by = yBar(d[opts.barKey]);
+    const bh = (opts.padT + ch) - by;
+    bars += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="${opts.barColor}" opacity="0.75" />`;
+  });
+
+  // Line
+  let line = '';
+  data.forEach((d, i) => {
+    line += (i === 0 ? 'M ' : 'L ') + x(i) + ' ' + yLine(d[opts.lineKey]) + ' ';
+  });
+  let dots = '';
+  data.forEach((d, i) => {
+    dots += `<circle cx="${x(i)}" cy="${yLine(d[opts.lineKey])}" r="2.2" fill="${opts.lineColor}" />`;
+  });
+
+  // X labels
+  let xLabels = '';
+  data.forEach((d, i) => {
+    if (i % 2 === 0 || i === data.length - 1) {
+      xLabels += `<text x="${x(i)}" y="${opts.padT + ch + 18}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${d.m}</text>`;
+    }
+  });
+
+  // Legend
+  const legend = `
+    <g transform="translate(${opts.padL}, ${opts.padT - 10})">
+      <rect x="0" y="-8" width="10" height="10" fill="${opts.barColor}" opacity="0.75" />
+      <text x="16" y="1" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="1">LEADS</text>
+      <line x1="80" y1="-3" x2="100" y2="-3" stroke="${opts.lineColor}" stroke-width="1.6" />
+      <circle cx="90" cy="-3" r="2.2" fill="${opts.lineColor}" />
+      <text x="106" y="1" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="1">ROAS</text>
+    </g>
+  `;
+
+  const svg = `
+    <svg viewBox="0 0 ${opts.width} ${opts.height}" preserveAspectRatio="xMidYMid meet">
+      ${gridY}
+      ${bars}
+      <path d="${line}" fill="none" stroke="${opts.lineColor}" stroke-width="1.5" />
+      ${dots}
+      ${yLabelsL}
+      ${yLabelsR}
+      ${xLabels}
+      ${legend}
+    </svg>
+  `;
+  c.innerHTML = svg;
+}
+
+function buildBarComboChart(containerId, data, options) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  const opts = Object.assign({
+    width: 1000, height: 320, padL: 50, padR: 50, padT: 20, padB: 40,
+    barKey: 'total', lineKey: 'ret',
+    barColor: '#C8A763', lineColor: '#6E8AAC',
+  }, options || {});
+
+  const maxBar = Math.max(...data.map(d => d[opts.barKey])) * 1.1;
+  const maxLine = Math.max(...data.map(d => d[opts.lineKey])) * 1.3;
+  const cw = opts.width - opts.padL - opts.padR;
+  const ch = opts.height - opts.padT - opts.padB;
+  const stepX = cw / data.length;
+
+  const x = (i) => opts.padL + i * stepX + stepX * 0.5;
+  const yBar  = (v) => opts.padT + ch - (v / maxBar) * ch;
+  const yLine = (v) => opts.padT + ch - (v / maxLine) * ch;
+
+  let gridY = '';
+  let yLabelsL = '';
+  let yLabelsR = '';
+  for (let i = 0; i <= 4; i++) {
+    const yp = opts.padT + ch - (i / 4) * ch;
+    gridY += `<line x1="${opts.padL}" y1="${yp}" x2="${opts.padL + cw}" y2="${yp}" stroke="#3A332A" stroke-width="0.5" />`;
+    const lv = maxBar * (i / 4);
+    yLabelsL += `<text x="${opts.padL - 8}" y="${yp + 3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${(lv / 1000).toFixed(0)}K</text>`;
+    const rv = maxLine * (i / 4);
+    yLabelsR += `<text x="${opts.padL + cw + 8}" y="${yp + 3}" text-anchor="start" font-family="JetBrains Mono" font-size="9" fill="${opts.lineColor}">${(rv / 1000).toFixed(1)}K</text>`;
+  }
+
+  let bars = '';
+  data.forEach((d, i) => {
+    const bw = stepX * 0.65;
+    const bx = opts.padL + i * stepX + (stepX - bw) / 2;
+    const by = yBar(d[opts.barKey]);
+    const bh = (opts.padT + ch) - by;
+    bars += `<rect x="${bx}" y="${by}" width="${bw}" height="${bh}" fill="${opts.barColor}" opacity="0.85" />`;
+  });
+
+  let line = '';
+  data.forEach((d, i) => {
+    line += (i === 0 ? 'M ' : 'L ') + x(i) + ' ' + yLine(d[opts.lineKey]) + ' ';
+  });
+  let dots = '';
+  data.forEach((d, i) => {
+    dots += `<circle cx="${x(i)}" cy="${yLine(d[opts.lineKey])}" r="2.5" fill="${opts.lineColor}" stroke="#161410" stroke-width="0.6" />`;
+  });
+
+  let xLabels = '';
+  data.forEach((d, i) => {
+    if (i % 2 === 0 || i === data.length - 1) {
+      xLabels += `<text x="${x(i)}" y="${opts.padT + ch + 18}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6E6553">${d.m}</text>`;
+    }
+  });
+
+  const legend = `
+    <g transform="translate(${opts.padL}, ${opts.padT - 10})">
+      <rect x="0" y="-8" width="10" height="10" fill="${opts.barColor}" opacity="0.85" />
+      <text x="16" y="1" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="1">TOTAL</text>
+      <line x1="80" y1="-3" x2="100" y2="-3" stroke="${opts.lineColor}" stroke-width="1.6" />
+      <circle cx="90" cy="-3" r="2.5" fill="${opts.lineColor}" />
+      <text x="106" y="1" font-family="JetBrains Mono" font-size="9" fill="#A89D85" letter-spacing="1">RETURNING</text>
+    </g>
+  `;
+
+  const svg = `
+    <svg viewBox="0 0 ${opts.width} ${opts.height}" preserveAspectRatio="xMidYMid meet">
+      ${gridY}
+      ${bars}
+      <path d="${line}" fill="none" stroke="${opts.lineColor}" stroke-width="1.4" />
+      ${dots}
+      ${yLabelsL}
+      ${yLabelsR}
+      ${xLabels}
+      ${legend}
+    </svg>
+  `;
+  c.innerHTML = svg;
+}
+
+// Render charts
+document.addEventListener('DOMContentLoaded', () => {
+  buildAreaChart('chart-users', USERS, {
+    yFmt: v => (v / 1000).toFixed(0) + 'K',
+    inflections: [
+      { label: "Jun '24", note: "INFLECTION I" },
+      { label: "Jan '25", note: "INFLECTION II" }
+    ]
+  });
+  buildBarComboChart('chart-returning', RETURNING, {});
+  buildAreaChart('chart-organic', ORGANIC, {
+    color: '#6E8AAC',
+    accent: '#4D6B8E',
+    yKey: 'v',
+    yFmt: v => v.toFixed(1) + 'M'
+  });
+  buildBarLineChart('chart-paid', PAID, {});
+});
+
+// Re-render on resize for clean responsive charts
+let rt;
+window.addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(() => {
+    buildAreaChart('chart-users', USERS, {
+      yFmt: v => (v / 1000).toFixed(0) + 'K',
+      inflections: [
+        { label: "Jun '24", note: "INFLECTION I" },
+        { label: "Jan '25", note: "INFLECTION II" }
+      ]
+    });
+    buildBarComboChart('chart-returning', RETURNING, {});
+    buildAreaChart('chart-organic', ORGANIC, {
+      color: '#6E8AAC',
+      accent: '#4D6B8E',
+      yKey: 'v',
+      yFmt: v => v.toFixed(1) + 'M'
+    });
+    buildBarLineChart('chart-paid', PAID, {});
+  }, 200);
+});
+</script>
+
+</body>
+</html>

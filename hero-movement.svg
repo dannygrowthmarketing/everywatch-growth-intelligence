@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 360" preserveAspectRatio="xMidYMid meet">
+  <!-- Background plate -->
+  <rect width="1400" height="360" fill="#161410"/>
+
+  <!-- Engraved hairline grid (very subtle) -->
+  <g stroke="#3A332A" stroke-width="0.4" opacity="0.5">
+    <line x1="0"   y1="80"  x2="1400" y2="80"/>
+    <line x1="0"   y1="280" x2="1400" y2="280"/>
+  </g>
+
+  <!-- Top engraving line with reference number -->
+  <line x1="60"   y1="42" x2="160"  y2="42" stroke="#8A6F38" stroke-width="0.6"/>
+  <line x1="1240" y1="42" x2="1340" y2="42" stroke="#8A6F38" stroke-width="0.6"/>
+  <text x="700" y="46" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" fill="#8A6F38" letter-spacing="6">REFERENCE 26 · ATELIER BANGALORE · ANNO 2026</text>
+
+  <!-- Main movement composition — horizontal -->
+  <!-- Mainplate edge -->
+  <line x1="80"  y1="180" x2="1320" y2="180" stroke="#3A332A" stroke-width="0.4" opacity="0.6"/>
+
+  <!-- Mainspring barrel (far left) -->
+  <g transform="translate(180, 180)">
+    <circle r="56" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.8"/>
+    <circle r="48" fill="none" stroke="#5C4F38" stroke-width="0.3"/>
+    <g stroke="#8A6F38" stroke-width="0.35" opacity="0.7" fill="none">
+      <circle r="40"/>
+      <circle r="32"/>
+      <circle r="24"/>
+      <circle r="16"/>
+      <circle r="9"/>
+    </g>
+    <circle r="3.5" fill="#C8A763"/>
+    <circle r="2.5" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4"/>
+    <text x="0" y="92" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#A89D85" letter-spacing="3">MAINSPRING</text>
+  </g>
+
+  <!-- Bridge connecting barrel to center wheel -->
+  <path d="M 240 180 Q 320 130 400 180 Q 360 200 300 200 Q 250 200 240 180 Z"
+        fill="#221E18" stroke="#8A6F38" stroke-width="0.6"/>
+  <path d="M 250 180 Q 320 138 390 180 Q 355 195 305 195 Q 260 195 250 180 Z"
+        fill="none" stroke="#5C4F38" stroke-width="0.3"/>
+
+  <!-- Center wheel -->
+  <g transform="translate(440, 180)">
+    <circle r="40" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.7"/>
+    <circle r="32" fill="none" stroke="#5C4F38" stroke-width="0.4"/>
+    <!-- gear teeth indicator -->
+    <g stroke="#8A6F38" stroke-width="0.4">
+      <line x1="0" y1="-40" x2="0" y2="-32"/>
+      <line x1="0" y1="32" x2="0" y2="40"/>
+      <line x1="-40" y1="0" x2="-32" y2="0"/>
+      <line x1="40" y1="0" x2="32" y2="0"/>
+      <line x1="-28" y1="-28" x2="-23" y2="-23"/>
+      <line x1="28" y1="-28" x2="23" y2="-23"/>
+      <line x1="-28" y1="28" x2="-23" y2="23"/>
+      <line x1="28" y1="28" x2="23" y2="23"/>
+    </g>
+    <g stroke="#8A6F38" stroke-width="0.5">
+      <line x1="0" y1="-28" x2="0" y2="28"/>
+      <line x1="-28" y1="0" x2="28" y2="0"/>
+      <line x1="-20" y1="-20" x2="20" y2="20"/>
+      <line x1="20" y1="-20" x2="-20" y2="20"/>
+    </g>
+    <circle r="4" fill="#C8A763"/>
+    <circle r="2.5" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4"/>
+    <text x="0" y="76" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#A89D85" letter-spacing="3">CENTRE</text>
+  </g>
+
+  <!-- Third wheel -->
+  <g transform="translate(620, 180)">
+    <circle r="30" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.6"/>
+    <g stroke="#8A6F38" stroke-width="0.4">
+      <line x1="0" y1="-30" x2="0" y2="30"/>
+      <line x1="-30" y1="0" x2="30" y2="0"/>
+      <line x1="-21" y1="-21" x2="21" y2="21"/>
+      <line x1="21" y1="-21" x2="-21" y2="21"/>
+    </g>
+    <circle r="2.5" fill="#C8A763"/>
+    <circle r="2" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.3"/>
+    <text x="0" y="60" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#A89D85" letter-spacing="3">III</text>
+  </g>
+
+  <!-- Fourth wheel -->
+  <g transform="translate(780, 180)">
+    <circle r="24" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.6"/>
+    <g stroke="#8A6F38" stroke-width="0.4">
+      <line x1="0" y1="-24" x2="0" y2="24"/>
+      <line x1="-24" y1="0" x2="24" y2="0"/>
+      <line x1="-17" y1="-17" x2="17" y2="17"/>
+      <line x1="17" y1="-17" x2="-17" y2="17"/>
+    </g>
+    <circle r="2.5" fill="#C8A763"/>
+    <circle r="2" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.3"/>
+    <text x="0" y="50" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#A89D85" letter-spacing="3">IV</text>
+  </g>
+
+  <!-- Escape wheel -->
+  <g transform="translate(910, 180)">
+    <circle r="20" fill="#1F1B16" stroke="#8A6F38" stroke-width="0.5"/>
+    <circle r="14" fill="none" stroke="#8A6F38" stroke-width="0.4"/>
+    <g stroke="#8A6F38" stroke-width="0.4">
+      <line x1="0" y1="-20" x2="0" y2="20"/>
+      <line x1="-20" y1="0" x2="20" y2="0"/>
+      <line x1="-14" y1="-14" x2="14" y2="14"/>
+      <line x1="14" y1="-14" x2="-14" y2="14"/>
+    </g>
+    <circle r="2" fill="#C8A763"/>
+    <text x="0" y="44" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#A89D85" letter-spacing="3">ESC</text>
+  </g>
+
+  <!-- Pallet fork -->
+  <g transform="translate(970, 180)">
+    <path d="M -5 -18 L 0 -22 L 8 -16 L 10 -8 L 8 0 L 3 5 L -2 0 L -5 -8 Z"
+          fill="#221E18" stroke="#8A6F38" stroke-width="0.5"/>
+    <circle r="1.8" fill="#C8A763"/>
+  </g>
+
+  <!-- Balance wheel — the heart -->
+  <g transform="translate(1080, 180)">
+    <circle r="60" fill="none" stroke="#8A6F38" stroke-width="0.8"/>
+    <circle r="52" fill="none" stroke="#5C4F38" stroke-width="0.4"/>
+    <!-- spokes -->
+    <g stroke="#8A6F38" stroke-width="0.5">
+      <line x1="0" y1="-60" x2="0" y2="60"/>
+      <line x1="-60" y1="0" x2="60" y2="0"/>
+      <line x1="-42" y1="-42" x2="42" y2="42"/>
+      <line x1="42" y1="-42" x2="-42" y2="42"/>
+    </g>
+    <!-- hairspring -->
+    <g stroke="#C8A763" stroke-width="0.4" fill="none" opacity="0.95">
+      <circle r="7"/>
+      <circle r="11"/>
+      <circle r="15"/>
+      <circle r="19"/>
+      <circle r="23"/>
+    </g>
+    <!-- mass weights -->
+    <circle cx="0"   cy="-60" r="3.5" fill="#8A6F38"/>
+    <circle cx="0"   cy="60"  r="3.5" fill="#8A6F38"/>
+    <circle cx="-60" cy="0"   r="3.5" fill="#8A6F38"/>
+    <circle cx="60"  cy="0"   r="3.5" fill="#8A6F38"/>
+    <circle cx="-42" cy="-42" r="3" fill="#8A6F38"/>
+    <circle cx="42"  cy="-42" r="3" fill="#8A6F38"/>
+    <circle cx="-42" cy="42"  r="3" fill="#8A6F38"/>
+    <circle cx="42"  cy="42"  r="3" fill="#8A6F38"/>
+    <!-- center jewel -->
+    <circle r="3.5" fill="#C8A763"/>
+    <circle r="2.5" fill="#7A3A2E" stroke="#C8A763" stroke-width="0.4"/>
+    <text x="0" y="96" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#A89D85" letter-spacing="3">BALANCE</text>
+  </g>
+
+  <!-- Right-side engraved cartouche -->
+  <g transform="translate(1240, 165)">
+    <line x1="0" y1="0" x2="100" y2="0" stroke="#8A6F38" stroke-width="0.4"/>
+    <text x="0" y="14" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="14" fill="#C8A763">Calibre D.D.</text>
+    <text x="0" y="32" font-family="'JetBrains Mono', monospace" font-size="7" fill="#6E6553" letter-spacing="2">SIX YEARS · TEN MARKETS</text>
+    <line x1="0" y1="40" x2="100" y2="40" stroke="#8A6F38" stroke-width="0.4"/>
+  </g>
+
+  <!-- Engraved signature at bottom -->
+  <text x="700" y="324" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="13" fill="#8A6F38" letter-spacing="2">
+    Daniel Deepak · Growth · Performance · Analytics
+  </text>
+  <text x="700" y="342" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#6E6553" letter-spacing="4">
+    DD — REF.26 — BANGALORE
+  </text>
+</svg>
