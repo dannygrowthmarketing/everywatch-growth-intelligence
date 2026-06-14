@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EveryWatch · Growth Intelligence — The Movement Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,500&family=DM+Mono:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E0C09;
+  --ink2:#1A1710;
+  --ink3:#221F19;
+  --brass:#C9A227;
+  --brass2:#8A6F18;
+  --teal:#3FA8A0;
+  --cream:#F2EDE0;
+  --line:rgba(242,237,224,0.09);
+  --line2:rgba(201,162,39,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--ink);color:var(--cream);font-family:'Inter',sans-serif;overflow-x:hidden;}
+.serif{font-family:'Fraunces',Georgia,serif;}
+.mono{font-family:'DM Mono',monospace;letter-spacing:0.06em;}
+
+/* NAV RAIL */
+#navRail{
+  position:fixed;right:2rem;top:50%;transform:translateY(-50%);
+  z-index:100;display:flex;flex-direction:column;gap:1.8rem;align-items:center;
+}
+.nav-pip{
+  width:6px;height:6px;border-radius:50%;background:rgba(201,162,39,0.25);
+  cursor:pointer;transition:all 0.35s;position:relative;
+}
+.nav-pip.active,
+.nav-pip:hover{background:var(--brass);transform:scale(1.5);}
+.nav-pip .nav-label{
+  position:absolute;right:1.4rem;top:50%;transform:translateY(-50%);
+  font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;
+  color:var(--brass);opacity:0;white-space:nowrap;
+  transition:opacity 0.25s;pointer-events:none;
+}
+.nav-pip:hover .nav-label{opacity:1;}
+
+/* SCROLL PROGRESS */
+#scrollBar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--brass2),var(--brass));
+  z-index:200;transition:width 0.1s linear;
+}
+
+/* HERO */
+#hero{
+  position:relative;height:100vh;width:100%;overflow:hidden;
+}
+#heroCanvas{position:absolute;inset:0;display:block;width:100%;height:100%;}
+.hero-ui{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:clamp(2rem,5vh,4rem) clamp(2rem,6vw,5rem);
+  pointer-events:none;
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.brandmark{font-family:'Fraunces',serif;font-size:1.15rem;letter-spacing:0.12em;font-weight:300;}
+.brandmark em{color:var(--brass);font-style:normal;}
+.refcode{font-family:'DM Mono',monospace;font-size:0.62rem;opacity:0.45;text-align:right;line-height:1.8;}
+.hero-center{max-width:820px;}
+.eyebrow{
+  font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.28em;
+  color:var(--brass);margin-bottom:1.4rem;text-transform:uppercase;opacity:0.8;
+}
+.hero-h1{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(3rem,8.5vw,6.5rem);line-height:1.02;letter-spacing:-0.01em;
+}
+.hero-h1 em{color:var(--brass);font-weight:300;font-style:italic;}
+.hero-sub{
+  margin-top:1.8rem;max-width:560px;font-size:1rem;
+  line-height:1.7;opacity:0.6;font-weight:300;
+}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;}
+.hero-stats{display:flex;gap:3.5rem;flex-wrap:wrap;}
+.hstat .n{
+  font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,2.8rem);
+  color:var(--brass);line-height:1;
+}
+.hstat .l{font-size:0.65rem;opacity:0.45;letter-spacing:0.18em;text-transform:uppercase;margin-top:0.5rem;}
+.scroll-cue{
+  font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;
+  text-transform:uppercase;opacity:0.4;display:flex;align-items:center;gap:0.7rem;
+}
+.scroll-cue .tick{
+  width:1px;height:40px;background:var(--brass);
+  animation:tickPulse 2.2s ease-in-out infinite;
+}
+@keyframes tickPulse{
+  0%,100%{opacity:0.15;transform:scaleY(0.3);transform-origin:top;}
+  55%{opacity:0.9;transform:scaleY(1);}
+}
+
+/* SECTIONS */
+.section{
+  padding:clamp(4rem,10vh,9rem) clamp(2rem,6vw,5rem);
+  max-width:1360px;margin:0 auto;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.sec-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:2rem;margin-bottom:4rem;flex-wrap:wrap;
+}
+.roman{
+  font-family:'Fraunces',serif;font-size:0.95rem;color:var(--brass);
+  letter-spacing:0.2em;margin-bottom:0.9rem;
+}
+.sec-title{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:clamp(2rem,4.5vw,3.5rem);line-height:1.08;max-width:820px;
+}
+.sec-title em{color:var(--brass);font-style:italic;font-weight:300;}
+.sec-tag{font-family:'DM Mono',monospace;font-size:0.62rem;opacity:0.35;letter-spacing:0.16em;text-transform:uppercase;white-space:nowrap;}
+
+/* BODY TEXT */
+.body-text{font-size:0.95rem;line-height:1.75;opacity:0.65;font-weight:300;max-width:660px;}
+.body-text strong{color:var(--brass);font-weight:500;}
+
+/* SECTION I: growth curve */
+.curve-wrap{
+  display:grid;grid-template-columns:1.15fr 1fr;gap:5rem;align-items:center;
+  margin-top:1rem;
+}
+#curveCanvas{
+  width:100%;height:420px;display:block;
+  border:1px solid var(--line2);border-radius:3px;
+}
+.curve-meta{
+  font-family:'DM Mono',monospace;font-size:0.65rem;opacity:0.4;
+  margin-top:0.7rem;display:flex;justify-content:space-between;
+}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2rem;}
+.sg-card{
+  border:1px solid var(--line);padding:1.4rem;
+  background:rgba(201,162,39,0.03);
+}
+.sg-card .sgn{
+  font-family:'Fraunces',serif;font-size:2rem;color:var(--brass);line-height:1;
+}
+.sg-card .sgl{font-size:0.7rem;opacity:0.45;letter-spacing:0.15em;text-transform:uppercase;margin-top:0.6rem;}
+.sg-card .sgd{font-size:0.82rem;opacity:0.5;margin-top:0.5rem;line-height:1.5;}
+
+/* SECTION II: 3-pillar grid */
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+.pillar-card{
+  background:var(--ink);padding:2.8rem;transition:background 0.45s;
+  position:relative;overflow:hidden;
+}
+.pillar-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--brass);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.45s ease;
+}
+.pillar-card:hover{background:var(--ink2);}
+.pillar-card:hover::before{transform:scaleX(1);}
+.pc-idx{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--brass);letter-spacing:0.18em;margin-bottom:1.1rem;}
+.pc-title{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:500;margin-bottom:0.9rem;}
+.pc-body{font-size:0.88rem;line-height:1.65;opacity:0.6;font-weight:300;}
+.pc-figure{
+  font-family:'Fraunces',serif;font-size:1.15rem;color:var(--brass);
+  margin-top:1.6rem;font-weight:300;
+}
+
+/* SECTION III: dial complications */
+.dial-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:5rem;align-items:center;}
+#dialCanvas{width:100%;height:540px;display:block;cursor:grab;}
+#dialCanvas:active{cursor:grabbing;}
+.comp-list{display:flex;flex-direction:column;}
+.comp-item{
+  padding:1.5rem 0;border-bottom:1px solid var(--line);
+  cursor:pointer;transition:padding-left 0.32s;position:relative;
+}
+.comp-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--brass);transition:width 0.32s;
+}
+.comp-item:hover::before,.comp-item.active::before{width:2px;}
+.comp-item:hover,.comp-item.active{padding-left:1.1rem;}
+.ci-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--brass);letter-spacing:0.16em;margin-bottom:0.4rem;}
+.ci-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;}
+.ci-body{font-size:0.85rem;opacity:0.5;margin-top:0.5rem;max-height:0;overflow:hidden;transition:max-height 0.45s ease;}
+.comp-item.active .ci-body{max-height:160px;}
+
+/* SECTION IV: The Loupe */
+.loupe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);}
+.lot-card{
+  background:var(--ink);padding:2.6rem;cursor:pointer;
+  transition:background 0.35s;position:relative;overflow:hidden;
+}
+.lot-card:hover{background:var(--ink2);}
+.lot-badge{
+  font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--brass);
+  letter-spacing:0.18em;margin-bottom:0.6rem;
+}
+.lot-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:1rem;}
+.lot-expand{
+  max-height:0;overflow:hidden;transition:max-height 0.55s ease;
+}
+.lot-card.open .lot-expand{max-height:900px;}
+.lot-section{margin-top:1.2rem;}
+.lot-label{font-family:'DM Mono',monospace;font-size:0.62rem;opacity:0.35;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:0.4rem;}
+.lot-text{font-size:0.85rem;line-height:1.65;opacity:0.6;font-weight:300;}
+.lot-cta{
+  margin-top:1.4rem;font-family:'DM Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.2em;color:var(--brass);opacity:0.7;
+  transition:opacity 0.25s;
+}
+.lot-card.open .lot-cta{opacity:0.4;}
+.lot-cta::after{content:' +';transition:opacity 0.25s;}
+.lot-card.open .lot-cta::after{content:' −';}
+
+/* SECTION V: trade-offs */
+.trade-row{
+  display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:2.5rem;
+  padding:2rem 0;border-bottom:1px solid var(--line);align-items:start;
+}
+.tr-label{font-size:0.68rem;opacity:0.38;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:0.5rem;}
+.tr-choice{font-family:'Fraunces',serif;font-size:1.35rem;color:var(--brass);font-weight:300;margin-top:0.2rem;}
+.tr-col .tr-head{font-size:0.7rem;opacity:0.4;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.4rem;}
+.tr-col .tr-txt{font-size:0.86rem;line-height:1.62;opacity:0.6;font-weight:300;}
+
+/* SECTION VI: intelligence metrics */
+.intel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--line);}
+.intel-card{background:var(--ink);padding:2.8rem;}
+.intel-card:hover{background:var(--ink2);}
+.ic-num{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--brass);letter-spacing:0.18em;margin-bottom:0.7rem;}
+.ic-title{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500;margin-bottom:0.5rem;}
+.ic-sub{font-size:0.85rem;opacity:0.45;margin-bottom:1.4rem;}
+.ic-label{font-size:0.68rem;opacity:0.35;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:0.35rem;}
+.ic-text{font-size:0.86rem;line-height:1.6;opacity:0.6;font-weight:300;margin-bottom:1.2rem;}
+
+/* SECTION VII: observatory */
+.obs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+.obs-card{background:var(--ink);padding:2.6rem;}
+.obs-card:hover{background:var(--ink2);}
+.obs-period{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--brass);letter-spacing:0.16em;margin-bottom:0.9rem;}
+.obs-title{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:500;margin-bottom:1rem;}
+.obs-list{list-style:none;display:flex;flex-direction:column;gap:0.7rem;}
+.obs-list li{font-size:0.86rem;line-height:1.6;opacity:0.6;font-weight:300;padding-left:1rem;position:relative;}
+.obs-list li::before{content:'—';position:absolute;left:0;color:var(--brass);opacity:0.6;}
+
+/* PRINCIPLES */
+.principles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);}
+.prin-card{background:var(--ink);padding:2.4rem;}
+.prin-num{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--brass);letter-spacing:0.15em;margin-bottom:0.8rem;}
+.prin-title{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:500;margin-bottom:0.6rem;}
+.prin-body{font-size:0.85rem;line-height:1.65;opacity:0.55;font-weight:300;}
+
+/* FOOTER */
+footer{padding:6vh clamp(2rem,6vw,5rem);text-align:center;border-top:1px solid var(--line);}
+.ft-name{font-family:'Fraunces',serif;font-size:2rem;font-weight:300;}
+.ft-role{font-size:0.75rem;opacity:0.4;letter-spacing:0.18em;margin-top:0.6rem;text-transform:uppercase;}
+.ft-meta{font-family:'DM Mono',monospace;font-size:0.6rem;opacity:0.22;margin-top:2.5rem;letter-spacing:0.12em;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+@media(max-width:900px){
+  .curve-wrap,.dial-wrap{grid-template-columns:1fr;gap:2.5rem;}
+  .pillar-grid,.loupe-grid,.obs-grid,.intel-grid,.principles-grid{grid-template-columns:1fr;}
+  .trade-row{grid-template-columns:1fr;}
+  #dialCanvas{height:360px;}
+  #navRail{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="scrollBar"></div>
+
+<nav id="navRail" aria-label="Section navigation">
+  <div class="nav-pip active" data-section="0" onclick="scrollToSection(0)"><span class="nav-label">I · The Collection</span></div>
+  <div class="nav-pip" data-section="1" onclick="scrollToSection(1)"><span class="nav-label">II · The Market</span></div>
+  <div class="nav-pip" data-section="2" onclick="scrollToSection(2)"><span class="nav-label">III · The Movement</span></div>
+  <div class="nav-pip" data-section="3" onclick="scrollToSection(3)"><span class="nav-label">IV · The Loupe</span></div>
+  <div class="nav-pip" data-section="4" onclick="scrollToSection(4)"><span class="nav-label">V · The Craft</span></div>
+  <div class="nav-pip" data-section="5" onclick="scrollToSection(5)"><span class="nav-label">VI · The Intelligence</span></div>
+  <div class="nav-pip" data-section="6" onclick="scrollToSection(6)"><span class="nav-label">VII · The Observatory</span></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-ui">
+    <div class="hero-top">
+      <div class="brandmark">EveryWatch <em>·</em> Growth Intelligence</div>
+      <div class="refcode mono">REF. EW-GI-2425 / 17M<br>EDITION NO. 01 / WORKING DOCUMENT</div>
+    </div>
+    <div class="hero-center">
+      <div class="eyebrow">A Working Document — Reference 24/25</div>
+      <h1 class="hero-h1">Growth, <em>&amp; the systems</em><br>that produced it.</h1>
+      <p class="hero-sub">Seventeen months, two clear inflections, and the architecture beneath both. A movement assembled — every part present for a reason. Drag to inspect the mechanism.</p>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-stats">
+        <div class="hstat"><div class="n">20×</div><div class="l">Growth Multiple</div></div>
+        <div class="hstat"><div class="n">34×</div><div class="l">Lifetime ROAS</div></div>
+        <div class="hstat"><div class="n">105×</div><div class="l">Peak Month ROAS</div></div>
+        <div class="hstat"><div class="n">1.33M</div><div class="l">New Users Acquired</div></div>
+      </div>
+      <div class="scroll-cue"><div class="tick"></div>Scroll to open the case-back</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION I: THE COLLECTION -->
+<section class="section reveal" id="sec0">
+  <div class="sec-head">
+    <div>
+      <div class="roman">I · The Collection</div>
+      <h2 class="sec-title">From a quiet baseline to a marketplace of <em>two hundred thousand</em> monthly users.</h2>
+    </div>
+    <div class="sec-tag">n = 17 months · source: GA4</div>
+  </div>
+  <div class="curve-wrap">
+    <div>
+      <canvas id="curveCanvas"></canvas>
+      <div class="curve-meta mono">
+        <span>JAN '24 — 9,113 USERS</span>
+        <span>MAY '25 — 182,782 USERS</span>
+      </div>
+    </div>
+    <div>
+      <p class="body-text">This is not a campaign retrospective. It is a record of systems — what they were, what they did, and what they refused to do. Read it as a watchmaker would read a movement diagram: every part present for a reason.</p>
+      <p class="body-text" style="margin-top:1.2rem;">Two inflections matter. <strong>June 2024</strong> — the curve breaks from a flat baseline into a content-driven trajectory. <strong>January 2025</strong> — compounding organic meets a tightened paid engine. The plateau from January 2025 onward is not stagnation — it is the point the engine stopped being labor-intensive. The honest read: the next inflection is a different problem. Not acquisition. <em style="color:var(--brass)">Retention.</em></p>
+      <div class="stat-grid">
+        <div class="sg-card">
+          <div class="sgn">20×</div>
+          <div class="sgl">Growth Multiple</div>
+          <div class="sgd">Jan '24 → May '25 · 9,113 → 182,782 monthly</div>
+        </div>
+        <div class="sg-card">
+          <div class="sgn">1.33M</div>
+          <div class="sgl">New Users</div>
+          <div class="sgd">Cumulative across seventeen months</div>
+        </div>
+        <div class="sg-card">
+          <div class="sgn">215,636</div>
+          <div class="sgl">Returning Users</div>
+          <div class="sgd">14% of total — the named opportunity</div>
+        </div>
+        <div class="sg-card">
+          <div class="sgn">203.6K</div>
+          <div class="sgl">Peak Monthly</div>
+          <div class="sgd">May 2025 — total users that month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: 3 PILLARS (The Growth Function) -->
+<section class="section reveal" id="sec-pillars">
+  <div class="sec-head">
+    <div>
+      <div class="roman">The Growth Function, in Three Lines</div>
+      <h2 class="sec-title">Three pillars, <em>one named gap</em>.</h2>
+    </div>
+  </div>
+  <div class="pillar-grid">
+    <div class="pillar-card">
+      <div class="pc-idx mono">01 · PILLAR</div>
+      <h3 class="pc-title">Organic at scale.</h3>
+      <p class="pc-body">From 100K weekly impressions to 1.6M. CTR held above 1.7% through five compounding quarters — organic did not arrive, it was assembled. Built as an indexable data product, not a keyword chase.</p>
+      <div class="pc-figure mono">41.3M impr · 1.06M clicks · 1.9% avg CTR</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pc-idx mono">02 · PILLAR</div>
+      <h3 class="pc-title">Paid as a scalpel.</h3>
+      <p class="pc-body">Spend deliberately small — $23K across 13 months — because the channel earns its place at sub-$1 CPL. The point was never reach. The point was to keep the economics on the right side of the ledger.</p>
+      <div class="pc-figure mono">$23,210 → $787,874 attributed</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pc-idx mono">03 · GAP</div>
+      <h3 class="pc-title">The unbuilt third leg.</h3>
+      <p class="pc-body">Returning users at 14% of total. That is not a failure — it is the named, prioritized opportunity for the next twelve months, and the centerpiece of the lifecycle work that comes next.</p>
+      <div class="pc-figure mono">215,636 returning · 14% of total</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION II: THE MARKET -->
+<section class="section reveal" id="sec1">
+  <div class="sec-head">
+    <div>
+      <div class="roman">II · The Market</div>
+      <h2 class="sec-title">A marketplace, <em>not a website</em>.</h2>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+    <div>
+      <p class="body-text">EveryWatch sits at the intersection of collectors, dealers, and the slow-moving inventory of the world's most opaque luxury category. The growth question was never "how much traffic." It was which traffic, on which side, with what intent.</p>
+      <p class="body-text" style="margin-top:1.2rem;">The secondary watch market is fragmented across auction houses, specialty dealers, forums, and a long tail of private sellers. Pricing is opaque. Provenance is opaque. Availability moves faster than search engines index it. The buyer's real question is rarely "where can I buy" — it is "is this fair, is this real, is there a better one out there." Every system here exists to compress the time between a collector's interest and a collector's confidence.</p>
+      <p class="body-text" style="margin-top:1.2rem;">The collector side scales with content, paid acquisition, and brand. The dealer side scales through relationships, tooling, and economic asymmetry — they list because EveryWatch moves their inventory faster than alternatives. These are different growth functions, run on different clocks.</p>
+    </div>
+    <div>
+      <div class="sg-card" style="margin-bottom:1.5rem;">
+        <div class="sgl" style="margin-bottom:0.8rem;">Collector Side · Jan '24 — May '25</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.8rem;">
+          <div><div class="sgn">1.54M</div><div class="sgl">Cumulative total</div></div>
+          <div><div class="sgn">1.33M</div><div class="sgl">New collectors</div></div>
+          <div><div class="sgn">215.6K</div><div class="sgl">Returning (14%)</div></div>
+          <div><div class="sgn">203.6K</div><div class="sgl">Peak monthly</div></div>
+        </div>
+      </div>
+      <div class="sg-card">
+        <div class="sgl" style="margin-bottom:0.6rem;">Dealer Markets — Concentration</div>
+        <p class="sgd" style="margin-top:0.5rem;">Geneva · London · New York · Tokyo · Hong Kong · Dubai · Singapore — the constellation where dealer density compounds and supply-side investment will concentrate over the next twelve months.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION III: THE MOVEMENT -->
+<section class="section reveal" id="sec2">
+  <div class="sec-head">
+    <div>
+      <div class="roman">III · The Movement</div>
+      <h2 class="sec-title">Five complications, <em>one calibre</em>.</h2>
+    </div>
+    <div class="sec-tag">drag to rotate</div>
+  </div>
+  <div class="dial-wrap">
+    <canvas id="dialCanvas"></canvas>
+    <div class="comp-list">
+      <div class="comp-item active" data-i="0">
+        <div class="ci-num mono">MAINSPRING · ORGANIC</div>
+        <h4 class="ci-title">The engine that runs without external power.</h4>
+        <p class="ci-body">From 100K weekly impressions to 1.6M — a 55× lift — held against a stable 1.7–2.2% CTR. The work was not keyword chasing. It was building an indexable data product: programmatic watch references, model deep-pages, structured comparison content that earned its place in the result set. The lesson inside the numbers: CTR was capped by the SERP form factor, not by effort. Lifetime: 41.3M impressions, 1.06M clicks.</p>
+      </div>
+      <div class="comp-item" data-i="1">
+        <div class="ci-num mono">ESCAPEMENT · PAID</div>
+        <h4 class="ci-title">Regulated, precise, controlled energy.</h4>
+        <p class="ci-body">Spend held at $1,500/mo for ten consecutive months — a deliberate ceiling. Leads at $0.10–$0.80 each, ROAS rarely below 18×, peaking at 105× in May 2025. When budget did expand — June 2025 at $5,140 — ROAS reverted to the mean. Paid media at this scale is an efficient instrument, not a scalable one. The discipline was to use it for what it is good at, and refuse the temptation to make it more.</p>
+      </div>
+      <div class="comp-item" data-i="2">
+        <div class="ci-num mono">POWER RESERVE · LIFECYCLE</div>
+        <h4 class="ci-title">The stored value of every collector who came back.</h4>
+        <p class="ci-body">Acquisition was solved. Retention was not — and saying so is more useful than dressing it up. 14% returning against a research-heavy collector category implies a leak, not a ceiling. The architecture this calls for: behavioral segmentation, lifecycle triggers tuned to research patterns (saved searches, price-drop alerts, new-listing matches), and a CRM stack that treats returning users as the principal asset.</p>
+      </div>
+      <div class="comp-item" data-i="3">
+        <div class="ci-num mono">GOING TRAIN · AUTOMATION</div>
+        <h4 class="ci-title">Gears that transmit force without human hands.</h4>
+        <p class="ci-body">Template-driven model reference pages with LLM enrichment — from 20 hand-built pages per quarter to thousands of indexable structured pages per month. Bid management against ROAS targets, weekly anomaly detection, automatic pause on CPL drift greater than 25%. Unified data layer from GA4, Search Console, Ads, CRM fed through weekly executive briefs.</p>
+      </div>
+      <div class="comp-item" data-i="4">
+        <div class="ci-num mono">REGULATOR · INTELLIGENCE</div>
+        <h4 class="ci-title">Measures everything. Adjusts everything.</h4>
+        <p class="ci-body">6+ data sources unified into a single warehouse and weekly brief. Decision latency under 48 hours — the May 2025 ROAS peak was caught on a Tuesday, acted on by Wednesday. The stack: GA4, Google Ads, Search Console, and a CRM-side event spine, modelled into a semantic layer, surfaced as decisions made faster, with fewer arguments, with a shared version of the truth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION IV: THE LOUPE -->
+<section class="section reveal" id="sec3">
+  <div class="sec-head">
+    <div>
+      <div class="roman">IV · The Loupe</div>
+      <h2 class="sec-title">Three decisions, <em>opened up</em>.</h2>
+    </div>
+    <div class="sec-tag">click any lot to inspect</div>
+  </div>
+  <div class="loupe-grid">
+    <!-- LOT 01 -->
+    <div class="lot-card" onclick="toggleLot(this)">
+      <div class="lot-badge mono">LOT 01 · JUNE 2024</div>
+      <h3 class="lot-title">The first inflection — from a flat baseline to a content engine.</h3>
+      <p style="font-size:0.85rem;opacity:0.5;font-weight:300;">Why 4,538 monthly users became 32,014 in thirty days — and why I refuse to call it lucky.</p>
+      <div class="lot-cta mono">Inspect under the loupe</div>
+      <div class="lot-expand">
+        <div class="lot-section"><div class="lot-label mono">Observation</div><p class="lot-text">Through May 2024, monthly new users had oscillated between 4.5K and 17.7K with no clear trend. The acquisition surface was small, the content surface was smaller, and the marketplace was effectively invisible to search.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Hypothesis</div><p class="lot-text">The category has long-tail evergreen search demand that compounds. Traffic was flat not because of market interest, but because of distribution. If we built a structured content layer indexed against actual watch reference data, search would find it.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Validation</div><p class="lot-text">We piloted programmatic content against the highest-intent long tail — specific reference numbers, model-year deep pages, comparison sets. Within four weeks, indexed pages cleared 10× prior coverage; CTR on the new pages held at 1.8–2.4%.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Decision</div><p class="lot-text">Lean in. Scale the content engine from pilot to production system. Hold paid budget flat — the marginal lead from organic was below the marginal lead from paid by a factor of ten.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Result</div><p class="lot-text">June 2024: new users moved from 4,538 to 32,014. The trajectory has not reverted since. Organic became the largest contributor to the funnel without ever appearing on a P&L.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Recommendation</div><p class="lot-text">The same pattern is available on the dealer side — programmatic listing pages, structured availability data, dealer reference content. The next 10× lift is not on the collector side. It is on the supply side.</p></div>
+      </div>
+    </div>
+    <!-- LOT 02 -->
+    <div class="lot-card" onclick="toggleLot(this)">
+      <div class="lot-badge mono">LOT 02 · MAY 2025</div>
+      <h3 class="lot-title">The 105× ROAS peak — and the honest read of it.</h3>
+      <p style="font-size:0.85rem;opacity:0.5;font-weight:300;">What happened, why it happened, and why I would not promise it could happen again.</p>
+      <div class="lot-cta mono">Inspect under the loupe</div>
+      <div class="lot-expand">
+        <div class="lot-section"><div class="lot-label mono">Observation</div><p class="lot-text">May 2025 returned $160,393 of attributed revenue on $1,520 of paid spend — a 105× ROAS month against a 13-month average closer to 34×. CPL hit $0.10. CVR hit 214.9%.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Hypothesis</div><p class="lot-text">The peak was not a single cause but a confluence: low CPC from a competitor pulling spend, an unusually strong CTR driven by a content-tailwind month, and a CVR amplified by lifecycle messaging into a primed audience.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Validation</div><p class="lot-text">When we tried to push budget to capture the moment — June 2025, $5,140 spend — ROAS reverted to 30.9×. The auction dynamic that produced May was gone within three weeks.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Decision</div><p class="lot-text">Hold the win. Do not let an exceptional month set the planning baseline for the next quarter. Annotate the moment in the executive notes so future budget conversations remember what 105× actually required.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Result</div><p class="lot-text">Aug 2025 reset the team's calibration: CPL drifted to $1.10, ROAS to 13.7×. The system caught the drift inside a week. Budget cut to $1,140; efficiency floor protected.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Recommendation</div><p class="lot-text">Peaks like May are gifts, not strategies. The system to keep is the one that catches them when they appear, and walks away gracefully when they end. Most teams fail at the walking-away.</p></div>
+      </div>
+    </div>
+    <!-- LOT 03 -->
+    <div class="lot-card" onclick="toggleLot(this)">
+      <div class="lot-badge mono">LOT 03 · Q3 2025</div>
+      <h3 class="lot-title">Efficiency erosion — reading the signal correctly.</h3>
+      <p style="font-size:0.85rem;opacity:0.5;font-weight:300;">When the CPL drift began, the right answer was to cut spend, not to spend more diagnosing.</p>
+      <div class="lot-cta mono">Inspect under the loupe</div>
+      <div class="lot-expand">
+        <div class="lot-section"><div class="lot-label mono">Observation</div><p class="lot-text">Across July and August 2025, CPL drifted from $0.50 → $0.80 → $1.10. CVR collapsed from 114% → 62% → 28%. Spend, meanwhile, had been expanded based on May's signal.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Hypothesis</div><p class="lot-text">Two possibilities: the audience was saturating (deeper-funnel users had already converted), or the creative had decayed against the segment. Both pointed in the same direction — pull spend.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Validation</div><p class="lot-text">We tested isolated creative refresh without budget cut. Lift was marginal. The clearer signal was audience exhaustion at current targeting. Continuing to spend was buying lower-quality leads at higher costs.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Decision</div><p class="lot-text">Cut spend by half in two consecutive months. Hold the team's instinct to optimise the campaign; the campaign was not the problem. The problem was the question being asked of it.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Result</div><p class="lot-text">August 2025: $1,140 spend produced 1,040 leads at $15,590 revenue — ROAS 13.7×. Lower in absolute terms; the right floor for an exhausted audience.</p></div>
+        <div class="lot-section"><div class="lot-label mono">Recommendation</div><p class="lot-text">Build the next audience layer before reopening spend. Dealer-side targeting, retention-cohort lookalikes, and a refreshed creative system tied to lifecycle behaviour — not to channel templates.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION V: THE CRAFT -->
+<section class="section reveal" id="sec4">
+  <div class="sec-head">
+    <div>
+      <div class="roman">V · The Craft</div>
+      <h2 class="sec-title">A craft is, in the end, a discipline of <em>refusal</em>.</h2>
+    </div>
+  </div>
+  <div>
+    <div class="trade-row">
+      <div><div class="tr-label">Speed vs. Compounding</div><div class="tr-choice">Chose Compounding</div></div>
+      <div class="tr-col"><div class="tr-head">Cost</div><p class="tr-txt">We left short-term growth on the table for six months while building the content engine. The pressure to spend on paid acquisition was constant.</p></div>
+      <div class="tr-col"><div class="tr-head">Payoff</div><p class="tr-txt">By month nine the compounding side carried the curve. By month fifteen, paid was a scalpel, not a lifeline.</p></div>
+      <div class="tr-col"><div class="tr-head">Lesson</div><p class="tr-txt">Most growth teams default to speed because it is legible. The case for compounding has to be made deliberately, repeatedly, against quarterly pressure.</p></div>
+    </div>
+    <div class="trade-row">
+      <div><div class="tr-label">Brand vs. Demand</div><div class="tr-choice">Demand, with brand discipline</div></div>
+      <div class="tr-col"><div class="tr-head">Cost</div><p class="tr-txt">We did not run brand-led campaigns. We did not buy awareness for its own sake. EveryWatch is less recognised than it could be.</p></div>
+      <div class="tr-col"><div class="tr-head">Payoff</div><p class="tr-txt">Every dollar was attributable. Every channel was held to a return. The brand was earned through repeated, useful interaction — not bought.</p></div>
+      <div class="tr-col"><div class="tr-head">Lesson</div><p class="tr-txt">Brand and demand are not opposed. Demand work, done well, becomes brand. The opposite is far less reliable.</p></div>
+    </div>
+    <div class="trade-row">
+      <div><div class="tr-label">Build vs. Rent</div><div class="tr-choice">Build what compounds</div></div>
+      <div class="tr-col"><div class="tr-head">Cost</div><p class="tr-txt">The analytics and content automation infrastructure consumed engineering hours that could have shipped product features.</p></div>
+      <div class="tr-col"><div class="tr-head">Payoff</div><p class="tr-txt">The team owns the data layer. Decisions move faster because the question doesn't have to be re-asked of a vendor.</p></div>
+      <div class="tr-col"><div class="tr-head">Lesson</div><p class="tr-txt">Tools you rent become tools you depend on. The ones that touch the asset — content, data, lifecycle logic — belong in-house.</p></div>
+    </div>
+    <div class="trade-row">
+      <div><div class="tr-label">Collector vs. Dealer</div><div class="tr-choice">Collector first, dealer next</div></div>
+      <div class="tr-col"><div class="tr-head">Cost</div><p class="tr-txt">Dealer-side density grew slower than collector-side audience. There is a supply-side debt accruing.</p></div>
+      <div class="tr-col"><div class="tr-head">Payoff</div><p class="tr-txt">A collector audience of this size makes the dealer pitch easier — and dramatically reduces dealer CAC when we open that channel.</p></div>
+      <div class="tr-col"><div class="tr-head">Lesson</div><p class="tr-txt">In a marketplace, sequence matters as much as strategy. We built the demand magnet first because the supply pitch needs it. Now is the moment to spend it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION VI: THE INTELLIGENCE -->
+<section class="section reveal" id="sec5">
+  <div class="sec-head">
+    <div>
+      <div class="roman">VI · The Intelligence</div>
+      <h2 class="sec-title">A number carries its reason, <em>or it is decoration</em>.</h2>
+    </div>
+  </div>
+  <div class="intel-grid">
+    <div class="intel-card">
+      <div class="ic-num mono">METRIC 01 · USER TRAJECTORY</div>
+      <h3 class="ic-title">From 9,113 to 182,782 monthly new users.</h3>
+      <div class="ic-sub">Two inflections. Both correspond to system shifts, not campaign launches.</div>
+      <div class="ic-label mono">Observation</div>
+      <p class="ic-text">The curve clears two clear inflections (Jun '24, Jan '25). Both correspond to system shifts, not campaign launches.</p>
+      <div class="ic-label mono">What caused it</div>
+      <p class="ic-text">Content engine production scale-up in mid-2024; sustained organic compounding and a tightened paid–lifecycle interplay through Q4 2024 and into 2025.</p>
+      <div class="ic-label mono">What I'd do next</div>
+      <p class="ic-text">Pivot the growth investment from acquisition to retention. The next 10× is not on the curve — it is below it, in the 14% returning-user rate.</p>
+    </div>
+    <div class="intel-card">
+      <div class="ic-num mono">METRIC 02 · PAID ROAS</div>
+      <h3 class="ic-title">Lifetime 34×, peak 105×, current 13.7×.</h3>
+      <div class="ic-sub">May 2025 peak was a confluence event, not a baseline.</div>
+      <div class="ic-label mono">Observation</div>
+      <p class="ic-text">The May 2025 peak was a confluence event, not a baseline. Aug 2025 reset the calibration cleanly.</p>
+      <div class="ic-label mono">What caused it</div>
+      <p class="ic-text">Audience saturation at the current targeting layer combined with creative decay. Spend expansion in June pulled forward demand from July–August.</p>
+      <div class="ic-label mono">What I'd do next</div>
+      <p class="ic-text">Hold spend at floor. Open a new audience layer — dealer-side targeting, retention-cohort lookalikes — before reopening budget.</p>
+    </div>
+    <div class="intel-card">
+      <div class="ic-num mono">METRIC 03 · ORGANIC CTR PLATEAU</div>
+      <h3 class="ic-title">CTR held at 1.7–2.5% while impressions grew 55×.</h3>
+      <div class="ic-sub">A SERP form-factor ceiling, not an effort ceiling.</div>
+      <div class="ic-label mono">Observation</div>
+      <p class="ic-text">The ratio of clicks to impressions flattened above 3M monthly impressions — a SERP form-factor ceiling, not an effort ceiling.</p>
+      <div class="ic-label mono">What caused it</div>
+      <p class="ic-text">At scale, additional impressions are weighted toward lower-position results and zero-click answer boxes. The marginal impression is a brand impression, not a click.</p>
+      <div class="ic-label mono">What I'd do next</div>
+      <p class="ic-text">Stop optimising for click rate; optimise for the kinds of impressions that compound brand recognition. Track returning organic users as the lagging indicator.</p>
+    </div>
+    <div class="intel-card">
+      <div class="ic-num mono">METRIC 04 · RETURNING COLLECTOR RATE</div>
+      <h3 class="ic-title">14% of total. Flat.</h3>
+      <div class="ic-sub">The wrong shape for a research-heavy category.</div>
+      <div class="ic-label mono">Observation</div>
+      <p class="ic-text">The returning-user share has stayed proportional through the audience expansion — the wrong shape for a research-heavy category.</p>
+      <div class="ic-label mono">What caused it</div>
+      <p class="ic-text">Lifecycle infrastructure was the deferred investment. Acquisition was solved first because it was the gating constraint.</p>
+      <div class="ic-label mono">What I'd do next</div>
+      <p class="ic-text">Build the lifecycle stack as the next major capability. A 5-point lift in returning rate within two quarters — a zero-incremental-spend lever with eight-figure compounding effect.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION VII: THE OBSERVATORY -->
+<section class="section reveal" id="sec6">
+  <div class="sec-head">
+    <div>
+      <div class="roman">VII · The Observatory</div>
+      <h2 class="sec-title">If I joined <em>tomorrow</em>.</h2>
+    </div>
+    <div class="sec-tag">first 90 days</div>
+  </div>
+
+  <!-- Operating Principles -->
+  <div style="margin-bottom:3rem;">
+    <p class="body-text" style="margin-bottom:2rem;">The Observatory is where the chronometer is tested for accuracy across positions and temperatures — the place where the work meets the discipline.</p>
+    <div class="principles-grid">
+      <div class="prin-card"><div class="prin-num mono">— i.</div><h4 class="prin-title">Measure first.</h4><p class="prin-body">Every channel earns its instrumentation before it earns its budget. A growth function that ships ahead of its analytics is buying lottery tickets.</p></div>
+      <div class="prin-card"><div class="prin-num mono">— ii.</div><h4 class="prin-title">Plug leaks before scaling.</h4><p class="prin-body">A 5% lift in retention compounds harder than a 15% reduction in CPL. The instinct is the opposite. The math is not.</p></div>
+      <div class="prin-card"><div class="prin-num mono">— iii.</div><h4 class="prin-title">Movements over campaigns.</h4><p class="prin-body">A campaign is an event. A movement is a compounding asset. If a result cannot be re-produced without rebuilding it, it was not real.</p></div>
+      <div class="prin-card"><div class="prin-num mono">— iv.</div><h4 class="prin-title">Automate the routine.</h4><p class="prin-body">The leverage is not in the unrepeatable moment. It is in everything below it that should not need a human at all.</p></div>
+      <div class="prin-card"><div class="prin-num mono">— v.</div><h4 class="prin-title">Data with context, or not at all.</h4><p class="prin-body">A number without a cause is decoration. The brief that begins "metrics are up" is the one that ends with a board meeting going badly.</p></div>
+      <div class="prin-card"><div class="prin-num mono">— vi.</div><h4 class="prin-title">Compounding over shortcuts.</h4><p class="prin-body">Six months of foundational work beats six weeks of optics every time. The discipline is to be patient in public.</p></div>
+    </div>
+  </div>
+
+  <!-- 90-day plan -->
+  <div class="obs-grid">
+    <div class="obs-card">
+      <div class="obs-period mono">DAYS 0—30</div>
+      <h3 class="obs-title">Measure.</h3>
+      <ul class="obs-list">
+        <li>Channel-level cohort retention across all surfaces — acquisition source × week × action density.</li>
+        <li>Dealer side of the marketplace: listings per dealer, supply velocity, demand pressure ratio.</li>
+        <li>Lifecycle instrumentation gaps: which user actions are not currently logged but should be.</li>
+        <li>Decision log started — every meaningful call captured with the loupe framework.</li>
+      </ul>
+    </div>
+    <div class="obs-card">
+      <div class="obs-period mono">DAYS 30—60</div>
+      <h3 class="obs-title">Fix the leaks.</h3>
+      <ul class="obs-list">
+        <li>Lifecycle messaging: saved-search alerts, price-movement triggers, dormancy re-engagement.</li>
+        <li>Onboarding flow tuned to collector research behaviour, not e-commerce defaults.</li>
+        <li>Dealer-side experimentation: structured listing pages, supply-density content, dealer CRM.</li>
+        <li>Paid floor protected — no expansion before the retention curve moves.</li>
+      </ul>
+    </div>
+    <div class="obs-card">
+      <div class="obs-period mono">DAYS 60—90</div>
+      <h3 class="obs-title">Build the systems.</h3>
+      <ul class="obs-list">
+        <li>Lifecycle automation graduates from MVP to platform — segment-level testing, version control on creative.</li>
+        <li>Unified data layer extends to dealer-side metrics; weekly executive brief covers both sides.</li>
+        <li>First major audience-layer expansion in paid, against the new retention-cohort lookalikes.</li>
+        <li>Operating cadence documented; the growth function should run without me for two weeks.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:2rem;padding:2rem;border:1px solid var(--line);">
+    <p class="body-text" style="font-style:italic;opacity:0.55;">The growth function is a system of compounding decisions, made under uncertainty, on behalf of a business whose customers deserve better than what they usually get. That is the work. I would be glad to do it again.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-name serif">Daniel Deepak</div>
+  <div class="ft-role mono">Senior Growth · Performance · Analytics — Bangalore, India</div>
+  <div style="display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;">
+    <a href="https://github.com/dannygrowthmarketing" style="color:var(--brass);opacity:0.7;text-decoration:none;font-size:0.75rem;letter-spacing:0.18em;font-family:'DM Mono',monospace;">GITHUB</a>
+    <a href="https://linkedin.com/in/danny-ai-marketing" style="color:var(--brass);opacity:0.7;text-decoration:none;font-size:0.75rem;letter-spacing:0.18em;font-family:'DM Mono',monospace;">LINKEDIN</a>
+    <a href="https://dannygrowthmarketing.com" style="color:var(--brass);opacity:0.7;text-decoration:none;font-size:0.75rem;letter-spacing:0.18em;font-family:'DM Mono',monospace;">PORTFOLIO</a>
+  </div>
+  <div class="ft-meta mono">EVERYWATCH · GROWTH INTELLIGENCE · REFERENCE 24/25 · ANNO 2026</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===== SCROLL BAR + NAV ===== */
+(function(){
+  const bar = document.getElementById('scrollBar');
+  const pips = document.querySelectorAll('.nav-pip');
+  const sections = ['sec0','sec1','sec2','sec3','sec4','sec5','sec6'];
+  window.scrollToSection = function(i){
+    const el = document.getElementById(sections[i]);
+    if(el) el.scrollIntoView({behavior:'smooth'});
+  };
+  window.addEventListener('scroll', ()=>{
+    const prog = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    bar.style.width = (prog*100) + '%';
+    let activeIdx = 0;
+    sections.forEach((id,i)=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      const rect = el.getBoundingClientRect();
+      if(rect.top < window.innerHeight * 0.55) activeIdx = i;
+    });
+    pips.forEach((p,i)=>p.classList.toggle('active', i===activeIdx));
+  });
+})();
+
+/* ===== REVEAL ON SCROLL ===== */
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  },{threshold:0.08});
+  els.forEach(el=>io.observe(el));
+})();
+
+/* ===== LOT TOGGLE ===== */
+window.toggleLot = function(card){
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.lot-card').forEach(c=>c.classList.remove('open'));
+  if(!wasOpen) card.classList.add('open');
+};
+
+/* ===== COMPLICATIONS TOGGLE ===== */
+(function(){
+  document.querySelectorAll('.comp-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      document.querySelectorAll('.comp-item').forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+      activeComp = parseInt(item.dataset.i)||0;
+      targetHandAngle = (activeComp/5)*Math.PI*2 + Math.PI/2;
+    });
+  });
+})();
+
+/* ===== HERO: 3D WATCH MOVEMENT ===== */
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 20);
+
+  function resize(){
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  scene.add(new THREE.AmbientLight(0x4a3818, 1.4));
+  const keyLight = new THREE.DirectionalLight(0xffd090, 2.0);
+  keyLight.position.set(8, 12, 14);
+  scene.add(keyLight);
+  const rimLight = new THREE.PointLight(0x3fa8a0, 1.6, 80);
+  rimLight.position.set(-12, -8, 8);
+  scene.add(rimLight);
+  const fillLight = new THREE.PointLight(0xc9a227, 0.6, 50);
+  fillLight.position.set(12, -5, 5);
+  scene.add(fillLight);
+
+  const brassMat = new THREE.MeshStandardMaterial({color:0xC9A227, metalness:0.9, roughness:0.25, emissive:0x3a2800, emissiveIntensity:0.15});
+  const darkMat = new THREE.MeshStandardMaterial({color:0x28241c, metalness:0.7, roughness:0.45});
+  const tealMat = new THREE.MeshStandardMaterial({color:0x3fA8A0, metalness:0.75, roughness:0.28, emissive:0x0e2e2b, emissiveIntensity:0.5});
+  const plateMat = new THREE.MeshStandardMaterial({color:0x1e1b15, metalness:0.5, roughness:0.6});
+
+  function buildGear(radius, teeth, thick, mat, toothH){
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(radius-toothH, radius-toothH, thick, 56), mat);
+    body.rotation.x = Math.PI/2;
+    g.add(body);
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(radius*0.28, radius*0.28, thick+0.12, 24), mat);
+    hub.rotation.x = Math.PI/2;
+    g.add(hub);
+    // spokes
+    for(let s=0;s<4;s++){
+      const a = (s/4)*Math.PI*2;
+      const spoke = new THREE.Mesh(new THREE.BoxGeometry((radius-toothH)*0.85, thick*0.9, thick*0.2), mat);
+      spoke.position.set(Math.cos(a)*(radius-toothH)*0.4, Math.sin(a)*(radius-toothH)*0.4, 0);
+      spoke.rotation.z = a;
+      g.add(spoke);
+    }
+    for(let i=0;i<teeth;i++){
+      const a = (i/teeth)*Math.PI*2;
+      const tooth = new THREE.Mesh(new THREE.BoxGeometry(toothH*1.1, (Math.PI*2*radius/teeth)*0.52, thick), mat);
+      tooth.position.set(Math.cos(a)*(radius-toothH*0.5), Math.sin(a)*(radius-toothH*0.5), 0);
+      tooth.rotation.z = a;
+      g.add(tooth);
+    }
+    return g;
+  }
+
+  const root = new THREE.Group();
+  scene.add(root);
+
+  // Bridge plate
+  const plate = new THREE.Mesh(new THREE.CylinderGeometry(11, 11, 0.12, 80), plateMat);
+  plate.rotation.x = Math.PI/2;
+  plate.position.z = -0.5;
+  root.add(plate);
+
+  // Bezel ring
+  const bezel = new THREE.Mesh(new THREE.TorusGeometry(11, 0.22, 20, 120), brassMat);
+  root.add(bezel);
+
+  // Hour markers
+  for(let i=0;i<12;i++){
+    const a = (i/12)*Math.PI*2;
+    const isMain = i%3===0;
+    const marker = new THREE.Mesh(
+      new THREE.BoxGeometry(isMain?0.5:0.25, isMain?1.2:0.7, 0.12),
+      brassMat
+    );
+    marker.position.set(Math.cos(a)*10.2, Math.sin(a)*10.2, 0.1);
+    marker.rotation.z = a;
+    root.add(marker);
+  }
+
+  // Gears
+  const gA = buildGear(5.5, 20, 0.65, brassMat, 0.52);
+  gA.position.set(0, 0, 0);
+  root.add(gA);
+
+  const gB = buildGear(3.2, 14, 0.55, darkMat, 0.42);
+  gB.position.set(7.6, 1.8, 0.4);
+  root.add(gB);
+
+  const gC = buildGear(2.1, 10, 0.5, tealMat, 0.36);
+  gC.position.set(-7.2, -2.8, 0.6);
+  root.add(gC);
+
+  const gD = buildGear(1.4, 8, 0.42, brassMat, 0.28);
+  gD.position.set(3.8, -5.2, -0.3);
+  root.add(gD);
+
+  const gE = buildGear(1.0, 6, 0.38, tealMat, 0.22);
+  gE.position.set(-4.5, 4.5, 0.8);
+  root.add(gE);
+
+  // Jewels
+  for(let i=0;i<16;i++){
+    const a = (i/16)*Math.PI*2;
+    const jw = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 14), tealMat);
+    jw.position.set(Math.cos(a)*10.8, Math.sin(a)*10.8, 0.2);
+    root.add(jw);
+  }
+
+  root.rotation.x = -0.22;
+  root.position.x = 4.5;
+
+  let tgtRotY = 0.35, curRotY = 0.35;
+  let tgtRotX = -0.22, curRotX = -0.22;
+  let scroll = 0;
+
+  window.addEventListener('mousemove', e=>{
+    const mx = e.clientX/innerWidth - 0.5;
+    const my = e.clientY/innerHeight - 0.5;
+    tgtRotY = 0.35 + mx*0.7;
+    tgtRotX = -0.22 + my*0.35;
+  });
+
+  let drag = false, lastMX = 0, velX = 0;
+  canvas.addEventListener('pointerdown', e=>{ drag=true; lastMX=e.clientX; });
+  window.addEventListener('pointerup', ()=>{ drag=false; });
+  window.addEventListener('pointermove', e=>{
+    if(!drag) return;
+    velX = (e.clientX - lastMX) * 0.006;
+    tgtRotY += velX;
+    lastMX = e.clientX;
+  });
+
+  window.addEventListener('scroll', ()=>{
+    scroll = Math.min(scrollY / innerHeight, 1.3);
+  });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!drag) velX *= 0.92;
+    tgtRotY += velX;
+    curRotY += (tgtRotY - curRotY) * 0.038;
+    curRotX += (tgtRotX - curRotX) * 0.038;
+    root.rotation.y = curRotY;
+    root.rotation.x = curRotX;
+
+    // Gear rotation ratios (physically correct relative speeds)
+    const baseSpeed = 0.004;
+    gA.rotation.z += baseSpeed;
+    gB.rotation.z -= baseSpeed * (5.5/3.2);
+    gC.rotation.z += baseSpeed * (5.5/2.1);
+    gD.rotation.z -= baseSpeed * (5.5/1.4);
+    gE.rotation.z += baseSpeed * (5.5/1.0);
+
+    root.position.y = -scroll * 4.5;
+    root.scale.setScalar(1 - scroll * 0.18);
+    root.position.z = -scroll * 2;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ===== GROWTH CURVE: Three.js 3D ribbon chart ===== */
+(function(){
+  const canvas = document.getElementById('curveCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-10.5, 10.5, 7, -5.5, 0.1, 100);
+  camera.position.z = 12;
+
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    const asp = r.width / r.height;
+    const h = 6.25;
+    camera.left = -h * asp;
+    camera.right = h * asp;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  scene.add(new THREE.AmbientLight(0x554020, 0.9));
+  const dl = new THREE.DirectionalLight(0xffd090, 1.4);
+  dl.position.set(5, 8, 10);
+  scene.add(dl);
+
+  // Monthly data Jan'24 – Aug'25
+  const data = [9113,8200,12500,17700,9800,4538,32014,41000,52000,61000,70000,85000,
+                105000,128000,150000,168000,182782,178000,172000,165000];
+  const maxD = Math.max(...data);
+  const minD = Math.min(...data);
+  const n = data.length;
+
+  // Compute spline points
+  const pts3 = [];
+  for(let i=0;i<n;i++){
+    const x = -9.5 + (i/(n-1))*19;
+    const y = -4.2 + ((data[i]-minD)/(maxD-minD))*8;
+    pts3.push(new THREE.Vector3(x, y, 0));
+  }
+  const spline = new THREE.CatmullRomCurve3(pts3);
+  const curvePts = spline.getPoints(240);
+
+  // Main gold line
+  const lineGeo = new THREE.BufferGeometry().setFromPoints(curvePts);
+  scene.add(new THREE.Line(lineGeo, new THREE.LineBasicMaterial({color:0xC9A227, linewidth:3})));
+
+  // Ribbon fill under curve
+  const fillVerts = [];
+  const fillUV = [];
+  for(let i=0;i<curvePts.length-1;i++){
+    const p0 = curvePts[i], p1 = curvePts[i+1];
+    const b0 = new THREE.Vector3(p0.x, -4.5, 0);
+    const b1 = new THREE.Vector3(p1.x, -4.5, 0);
+    fillVerts.push(p0.x,p0.y,0, b0.x,b0.y,0, p1.x,p1.y,0);
+    fillVerts.push(b0.x,b0.y,0, b1.x,b1.y,0, p1.x,p1.y,0);
+  }
+  const fillG = new THREE.BufferGeometry();
+  fillG.setAttribute('position', new THREE.Float32BufferAttribute(fillVerts,3));
+  scene.add(new THREE.Mesh(fillG, new THREE.MeshBasicMaterial({color:0xC9A227, transparent:true, opacity:0.07, side:THREE.DoubleSide})));
+
+  // Grid lines
+  for(let i=0;i<=4;i++){
+    const y = -4.5 + (i/4)*8.5;
+    const gPts = [new THREE.Vector3(-9.8,y,0), new THREE.Vector3(9.8,y,0)];
+    scene.add(new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(gPts),
+      new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.055})
+    ));
+  }
+
+  // Inflection markers
+  const markers = [6, 12]; // June'24, Jan'25
+  const pulseRings = [];
+  markers.forEach(idx=>{
+    const p = curvePts[Math.floor(idx*(240/n))];
+    const dot = new THREE.Mesh(new THREE.CircleGeometry(0.18, 24), new THREE.MeshBasicMaterial({color:0x3fa8a0}));
+    dot.position.copy(p);
+    scene.add(dot);
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.22,0.3,24), new THREE.MeshBasicMaterial({color:0x3fa8a0, transparent:true, opacity:0.6}));
+    ring.position.copy(p);
+    ring.userData.phase = Math.random()*Math.PI*2;
+    scene.add(ring);
+    pulseRings.push(ring);
+  });
+
+  // End point gold
+  const endPt = curvePts[curvePts.length-1];
+  const endDot = new THREE.Mesh(new THREE.CircleGeometry(0.16, 24), new THREE.MeshBasicMaterial({color:0xC9A227}));
+  endDot.position.copy(endPt);
+  scene.add(endDot);
+
+  resize();
+  let vis = false;
+  new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) vis=true; }), {threshold:0.2}).observe(canvas);
+
+  let t = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    t += 0.02;
+    pulseRings.forEach(r=>{
+      const s = 1 + Math.sin(t + r.userData.phase)*0.3;
+      r.scale.setScalar(s);
+    });
+    if(vis) renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ===== DIAL: Complications Carousel ===== */
+var activeComp = 0;
+var targetHandAngle = Math.PI/2;
+
+(function(){
+  const canvas = document.getElementById('dialCanvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(0, 0.5, 12);
+
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    camera.aspect = r.width/r.height;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  scene.add(new THREE.AmbientLight(0x4a3010, 1.2));
+  const key = new THREE.DirectionalLight(0xffd090, 2.2);
+  key.position.set(7, 10, 12);
+  scene.add(key);
+  const rim = new THREE.PointLight(0x3fa8a0, 1.8, 50);
+  rim.position.set(-7, -5, 7);
+  scene.add(rim);
+  const fill = new THREE.PointLight(0xc9a227, 0.8, 30);
+  fill.position.set(0, 8, 5);
+  scene.add(fill);
+
+  const bMat = new THREE.MeshStandardMaterial({color:0xC9A227, metalness:0.88, roughness:0.22, emissive:0x2a1d00, emissiveIntensity:0.18});
+  const dkMat = new THREE.MeshStandardMaterial({color:0x2a261e, metalness:0.65, roughness:0.5});
+  const tlMat = new THREE.MeshStandardMaterial({color:0x3fa8a0, metalness:0.75, roughness:0.24, emissive:0x0e2e2b, emissiveIntensity:0.55});
+  const crMat = new THREE.MeshStandardMaterial({color:0xE8E0CC, metalness:0.3, roughness:0.65});
+
+  // Main dial body
+  const dial = new THREE.Mesh(new THREE.CylinderGeometry(4.4, 4.4, 0.45, 72), dkMat);
+  dial.rotation.x = Math.PI/2;
+  scene.add(dial);
+
+  // Bezel
+  const bezel = new THREE.Mesh(new THREE.TorusGeometry(4.4, 0.22, 26, 120), bMat);
+  scene.add(bezel);
+
+  // Dial chapter ring (thin)
+  const chap = new THREE.Mesh(new THREE.TorusGeometry(4.1, 0.06, 10, 80), bMat);
+  scene.add(chap);
+
+  // Hour markers on dial
+  for(let i=0;i<12;i++){
+    const a = (i/12)*Math.PI*2;
+    const mk = new THREE.Mesh(
+      i%3===0 ? new THREE.BoxGeometry(0.3,0.7,0.1) : new THREE.BoxGeometry(0.16,0.4,0.08),
+      bMat
+    );
+    mk.position.set(Math.cos(a)*3.8, Math.sin(a)*3.8, 0.28);
+    mk.rotation.z = a;
+    scene.add(mk);
+  }
+
+  // 5 Complication satellites
+  const satGroup = new THREE.Group();
+  scene.add(satGroup);
+  const satMats = [bMat, tlMat, crMat, dkMat, bMat];
+  const sats = [];
+  const satGeos = [
+    new THREE.CylinderGeometry(0.75,0.75,0.38,36),
+    new THREE.TorusGeometry(0.62,0.2,18,36),
+    new THREE.CylinderGeometry(0.7,0.7,0.35,36),
+    new THREE.OctahedronGeometry(0.65),
+    new THREE.TorusGeometry(0.58,0.18,16,32),
+  ];
+  for(let i=0;i<5;i++){
+    const a = (i/5)*Math.PI*2;
+    const r = 6.8;
+    const mesh = new THREE.Mesh(satGeos[i], satMats[i].clone());
+    mesh.position.set(Math.cos(a)*r, Math.sin(a)*r, 0);
+    if(i%2===0) mesh.rotation.x = Math.PI/2;
+    satGroup.add(mesh);
+    sats.push(mesh);
+
+    // Spoke
+    const spokePts = [new THREE.Vector3(0,0,0.1), new THREE.Vector3(Math.cos(a)*4.65, Math.sin(a)*4.65, 0.1)];
+    satGroup.add(new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(spokePts),
+      new THREE.LineBasicMaterial({color:0xC9A227, transparent:true, opacity:0.2})
+    ));
+  }
+
+  // Hand
+  const handGeo = new THREE.BoxGeometry(0.07, 3.5, 0.09);
+  handGeo.translate(0, 1.75, 0);
+  const hand = new THREE.Mesh(handGeo, tlMat.clone());
+  hand.position.z = 0.35;
+  scene.add(hand);
+
+  // Center jewel
+  scene.add(new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,0.25,24), bMat.clone().set));
+  const cj = new THREE.Mesh(new THREE.SphereGeometry(0.22,24,24), new THREE.MeshStandardMaterial({color:0xC9A227,metalness:0.95,roughness:0.1}));
+  cj.position.z = 0.38;
+  scene.add(cj);
+
+  let curHandAngle = Math.PI/2;
+  let rotZ = 0;
+  let drag = false, lastX = 0, vel = 0;
+
+  canvas.addEventListener('pointerdown', e=>{ drag=true; lastX=e.clientX; });
+  window.addEventListener('pointerup', ()=>{ drag=false; });
+  window.addEventListener('pointermove', e=>{
+    if(!drag) return;
+    vel = (e.clientX-lastX)*0.005;
+    rotZ += vel;
+    lastX = e.clientX;
+  });
+
+  let vis = false;
+  new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) vis=true; }), {threshold:0.15}).observe(canvas);
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!vis) return;
+    resize();
+    if(!drag) vel *= 0.88;
+    rotZ += 0.0022 + vel;
+    satGroup.rotation.z = rotZ;
+    dial.rotation.z = rotZ * 0.25;
+    bezel.rotation.z = rotZ * 0.08;
+
+    curHandAngle += (targetHandAngle + rotZ - curHandAngle) * 0.07;
+    hand.rotation.z = curHandAngle - Math.PI/2;
+
+    sats.forEach((s,i)=>{
+      const tgt = i===activeComp ? 1.5 : 1.0;
+      s.scale.setScalar(s.scale.x + (tgt - s.scale.x)*0.1);
+      s.rotation.z += 0.012;
+    });
+
+    scene.rotation.y = Math.sin(Date.now()*0.00018)*0.06;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
